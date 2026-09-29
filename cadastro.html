@@ -6,16 +6,23 @@
   <meta name="description" content="Cadastre-se como voluntário da ONG Mãos Solidárias.">
   <title>Seja Voluntário | ONG Mãos Solidárias</title>
   <link rel="stylesheet" href="css/estilo.css">
+  <script src="js/menu.js" defer></script>
   <script src="js/mascaras.js" defer></script>
 </head>
 <body>
-  <header>
+  <a class="pular-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <header class="cabecalho">
     <picture>
       <source srcset="imagens/logo.webp" type="image/webp">
-      <img src="imagens/logo.png" alt="Logotipo da ONG Mãos Solidárias: duas mãos estendidas uma em direção à outra, com o nome da ONG entre elas" width="80" height="80">
+      <img class="cabecalho__logo" src="imagens/logo.png" alt="Logotipo da ONG Mãos Solidárias: duas mãos estendidas uma em direção à outra, com o nome da ONG entre elas" width="80" height="80">
     </picture>
     <p class="marca">ONG Mãos Solidárias</p>
-    <nav aria-label="Menu principal">
+    <button type="button" class="menu-botao" aria-expanded="false" aria-controls="menu-principal">
+      <span class="menu-botao__icone" aria-hidden="true"></span>
+      Menu
+    </button>
+    <nav id="menu-principal" class="menu" aria-label="Menu principal">
       <ul>
         <li><a href="index.html">Início</a></li>
         <li><a href="projetos.html">Projetos</a></li>
@@ -24,141 +31,151 @@
     </nav>
   </header>
 
-  <main>
+  <main id="conteudo">
     <h1>Seja Voluntário</h1>
-    <p>Preencha o formulário abaixo. Campos marcados com <span aria-hidden="true">*</span> são obrigatórios.</p>
+    <p class="introducao">Preencha o formulário abaixo. Campos marcados com <span aria-hidden="true">*</span> são obrigatórios.</p>
 
-    <form id="form-cadastro" action="#" method="post">
+    <form id="form-cadastro" class="formulario" action="#" method="post">
       <fieldset>
         <legend><h2>Dados Pessoais</h2></legend>
 
-        <div class="campo">
-          <label for="nome">Nome completo <span aria-hidden="true">*</span></label>
-          <input type="text" id="nome" name="nome" required minlength="3" maxlength="100"
-                 pattern="[A-Za-zÀ-ÿ ]+" autocomplete="name"
-                 title="Use apenas letras e espaços, com no mínimo 3 caracteres.">
-        </div>
+        <div class="grade-campos">
+          <div class="campo campo--largo">
+            <label for="nome">Nome completo <span aria-hidden="true">*</span></label>
+            <input type="text" id="nome" name="nome" required minlength="3" maxlength="100"
+                   pattern="[A-Za-zÀ-ÿ ]+" autocomplete="name"
+                   title="Use apenas letras e espaços, com no mínimo 3 caracteres.">
+          </div>
 
-        <div class="campo">
-          <label for="cpf">CPF <span aria-hidden="true">*</span></label>
-          <input type="text" id="cpf" name="cpf" required inputmode="numeric" maxlength="14"
-                 pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" placeholder="000.000.000-00"
-                 title="Informe um CPF válido no formato 000.000.000-00.">
-        </div>
+          <div class="campo">
+            <label for="cpf">CPF <span aria-hidden="true">*</span></label>
+            <input type="text" id="cpf" name="cpf" required inputmode="numeric" maxlength="14"
+                   pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" placeholder="000.000.000-00"
+                   title="Informe um CPF válido no formato 000.000.000-00.">
+          </div>
 
-        <div class="campo">
-          <label for="nascimento">Data de nascimento <span aria-hidden="true">*</span></label>
-          <input type="date" id="nascimento" name="nascimento" required min="1900-01-01" max="2010-09-28"
-                 autocomplete="bday" aria-describedby="dica-nascimento">
-          <small id="dica-nascimento">Idade mínima de 16 anos.</small>
+          <div class="campo">
+            <label for="nascimento">Data de nascimento <span aria-hidden="true">*</span></label>
+            <input type="date" id="nascimento" name="nascimento" required min="1900-01-01" max="2010-09-28"
+                   autocomplete="bday" aria-describedby="dica-nascimento">
+            <small id="dica-nascimento">Idade mínima de 16 anos.</small>
+          </div>
         </div>
       </fieldset>
 
       <fieldset>
         <legend><h2>Contato</h2></legend>
 
-        <div class="campo">
-          <label for="email">E-mail <span aria-hidden="true">*</span></label>
-          <input type="email" id="email" name="email" required maxlength="100"
-                 autocomplete="email" placeholder="nome@exemplo.com">
-        </div>
+        <div class="grade-campos">
+          <div class="campo">
+            <label for="email">E-mail <span aria-hidden="true">*</span></label>
+            <input type="email" id="email" name="email" required maxlength="100"
+                   autocomplete="email" placeholder="nome@exemplo.com">
+          </div>
 
-        <div class="campo">
-          <label for="telefone">Telefone <span aria-hidden="true">*</span></label>
-          <input type="tel" id="telefone" name="telefone" required inputmode="numeric" maxlength="15"
-                 pattern="\(\d{2}\) \d{4,5}-\d{4}" autocomplete="tel" placeholder="(00) 00000-0000"
-                 title="Informe DDD e número, no formato (00) 00000-0000 ou (00) 0000-0000.">
+          <div class="campo">
+            <label for="telefone">Telefone <span aria-hidden="true">*</span></label>
+            <input type="tel" id="telefone" name="telefone" required inputmode="numeric" maxlength="15"
+                   pattern="\(\d{2}\) \d{4,5}-\d{4}" autocomplete="tel" placeholder="(00) 00000-0000"
+                   title="Informe DDD e número, no formato (00) 00000-0000 ou (00) 0000-0000.">
+          </div>
         </div>
       </fieldset>
 
       <fieldset>
         <legend><h2>Endereço</h2></legend>
 
-        <div class="campo">
-          <label for="cep">CEP <span aria-hidden="true">*</span></label>
-          <input type="text" id="cep" name="cep" required inputmode="numeric" maxlength="9"
-                 pattern="\d{5}-\d{3}" autocomplete="postal-code" placeholder="00000-000"
-                 title="Informe o CEP no formato 00000-000.">
-        </div>
+        <div class="grade-campos">
+          <div class="campo">
+            <label for="cep">CEP <span aria-hidden="true">*</span></label>
+            <input type="text" id="cep" name="cep" required inputmode="numeric" maxlength="9"
+                   pattern="\d{5}-\d{3}" autocomplete="postal-code" placeholder="00000-000"
+                   title="Informe o CEP no formato 00000-000.">
+          </div>
 
-        <div class="campo">
-          <label for="logradouro">Logradouro <span aria-hidden="true">*</span></label>
-          <input type="text" id="logradouro" name="logradouro" required minlength="3" maxlength="120"
-                 autocomplete="address-line1">
-        </div>
+          <div class="campo">
+            <label for="logradouro">Logradouro <span aria-hidden="true">*</span></label>
+            <input type="text" id="logradouro" name="logradouro" required minlength="3" maxlength="120"
+                   autocomplete="address-line1">
+          </div>
 
-        <div class="campo">
-          <label for="numero">Número <span aria-hidden="true">*</span></label>
-          <input type="text" id="numero" name="numero" required maxlength="6" inputmode="numeric"
-                 pattern="\d+|S/N" title="Informe apenas números ou S/N.">
-        </div>
+          <div class="campo">
+            <label for="numero">Número <span aria-hidden="true">*</span></label>
+            <input type="text" id="numero" name="numero" required maxlength="6" inputmode="numeric"
+                   pattern="\d+|S/N" title="Informe apenas números ou S/N.">
+          </div>
 
-        <div class="campo">
-          <label for="complemento">Complemento</label>
-          <input type="text" id="complemento" name="complemento" maxlength="60" autocomplete="address-line2">
-        </div>
+          <div class="campo">
+            <label for="complemento">Complemento</label>
+            <input type="text" id="complemento" name="complemento" maxlength="60" autocomplete="address-line2">
+          </div>
 
-        <div class="campo">
-          <label for="bairro">Bairro <span aria-hidden="true">*</span></label>
-          <input type="text" id="bairro" name="bairro" required minlength="2" maxlength="60">
-        </div>
+          <div class="campo">
+            <label for="bairro">Bairro <span aria-hidden="true">*</span></label>
+            <input type="text" id="bairro" name="bairro" required minlength="2" maxlength="60">
+          </div>
 
-        <div class="campo">
-          <label for="cidade">Cidade <span aria-hidden="true">*</span></label>
-          <input type="text" id="cidade" name="cidade" required minlength="2" maxlength="60"
-                 autocomplete="address-level2">
-        </div>
+          <div class="campo">
+            <label for="cidade">Cidade <span aria-hidden="true">*</span></label>
+            <input type="text" id="cidade" name="cidade" required minlength="2" maxlength="60"
+                   autocomplete="address-level2">
+          </div>
 
-        <div class="campo">
-          <label for="estado">Estado <span aria-hidden="true">*</span></label>
-          <select id="estado" name="estado" required autocomplete="address-level1">
-            <option value="">Selecione</option>
-            <option value="AC">Acre</option>
-            <option value="AL">Alagoas</option>
-            <option value="AP">Amapá</option>
-            <option value="AM">Amazonas</option>
-            <option value="BA">Bahia</option>
-            <option value="CE">Ceará</option>
-            <option value="DF">Distrito Federal</option>
-            <option value="ES">Espírito Santo</option>
-            <option value="GO">Goiás</option>
-            <option value="MA">Maranhão</option>
-            <option value="MT">Mato Grosso</option>
-            <option value="MS">Mato Grosso do Sul</option>
-            <option value="MG">Minas Gerais</option>
-            <option value="PA">Pará</option>
-            <option value="PB">Paraíba</option>
-            <option value="PR">Paraná</option>
-            <option value="PE">Pernambuco</option>
-            <option value="PI">Piauí</option>
-            <option value="RJ">Rio de Janeiro</option>
-            <option value="RN">Rio Grande do Norte</option>
-            <option value="RS">Rio Grande do Sul</option>
-            <option value="RO">Rondônia</option>
-            <option value="RR">Roraima</option>
-            <option value="SC">Santa Catarina</option>
-            <option value="SP">São Paulo</option>
-            <option value="SE">Sergipe</option>
-            <option value="TO">Tocantins</option>
-          </select>
+          <div class="campo">
+            <label for="estado">Estado <span aria-hidden="true">*</span></label>
+            <select id="estado" name="estado" required autocomplete="address-level1">
+              <option value="">Selecione</option>
+              <option value="AC">Acre</option>
+              <option value="AL">Alagoas</option>
+              <option value="AP">Amapá</option>
+              <option value="AM">Amazonas</option>
+              <option value="BA">Bahia</option>
+              <option value="CE">Ceará</option>
+              <option value="DF">Distrito Federal</option>
+              <option value="ES">Espírito Santo</option>
+              <option value="GO">Goiás</option>
+              <option value="MA">Maranhão</option>
+              <option value="MT">Mato Grosso</option>
+              <option value="MS">Mato Grosso do Sul</option>
+              <option value="MG">Minas Gerais</option>
+              <option value="PA">Pará</option>
+              <option value="PB">Paraíba</option>
+              <option value="PR">Paraná</option>
+              <option value="PE">Pernambuco</option>
+              <option value="PI">Piauí</option>
+              <option value="RJ">Rio de Janeiro</option>
+              <option value="RN">Rio Grande do Norte</option>
+              <option value="RS">Rio Grande do Sul</option>
+              <option value="RO">Rondônia</option>
+              <option value="RR">Roraima</option>
+              <option value="SC">Santa Catarina</option>
+              <option value="SP">São Paulo</option>
+              <option value="SE">Sergipe</option>
+              <option value="TO">Tocantins</option>
+            </select>
+          </div>
         </div>
       </fieldset>
 
       <fieldset>
         <legend><h2>Participação</h2></legend>
 
-        <fieldset id="grupo-projetos">
+        <fieldset id="grupo-projetos" class="grupo-opcoes">
           <legend><h3>Projetos de interesse <span aria-hidden="true">*</span></h3></legend>
-          <label><input type="checkbox" name="projetos" value="cozinha-solidaria"> Cozinha Solidária</label>
-          <label><input type="checkbox" name="projetos" value="reforco-escolar"> Reforço Escolar</label>
-          <label><input type="checkbox" name="projetos" value="inclusao-digital"> Inclusão Digital</label>
+          <div class="opcoes">
+            <label><input type="checkbox" name="projetos" value="cozinha-solidaria"> Cozinha Solidária</label>
+            <label><input type="checkbox" name="projetos" value="reforco-escolar"> Reforço Escolar</label>
+            <label><input type="checkbox" name="projetos" value="inclusao-digital"> Inclusão Digital</label>
+          </div>
         </fieldset>
 
-        <fieldset>
+        <fieldset class="grupo-opcoes">
           <legend><h3>Disponibilidade <span aria-hidden="true">*</span></h3></legend>
-          <label><input type="radio" name="disponibilidade" value="manha" required> Manhã</label>
-          <label><input type="radio" name="disponibilidade" value="tarde"> Tarde</label>
-          <label><input type="radio" name="disponibilidade" value="sabado"> Sábados</label>
+          <div class="opcoes">
+            <label><input type="radio" name="disponibilidade" value="manha" required> Manhã</label>
+            <label><input type="radio" name="disponibilidade" value="tarde"> Tarde</label>
+            <label><input type="radio" name="disponibilidade" value="sabado"> Sábados</label>
+          </div>
         </fieldset>
 
         <div class="campo">
@@ -167,23 +184,23 @@
         </div>
       </fieldset>
 
-      <div class="campo campo-termos">
+      <div class="campo-termos">
         <label>
           <input type="checkbox" name="termos" required>
-          Autorizo o uso dos meus dados pela ONG para fins de contato sobre o voluntariado. <span aria-hidden="true">*</span>
+          <span>Autorizo o uso dos meus dados pela ONG para fins de contato sobre o voluntariado. <span aria-hidden="true">*</span></span>
         </label>
       </div>
 
       <div class="acoes">
-        <button type="submit">Enviar cadastro</button>
-        <button type="reset">Limpar</button>
+        <button type="submit" class="botao">Enviar cadastro</button>
+        <button type="reset" class="botao botao--neutro">Limpar</button>
       </div>
 
-      <p id="mensagem-status" role="status" aria-live="polite"></p>
+      <p id="mensagem-status" class="mensagem-status" role="status" aria-live="polite"></p>
     </form>
   </main>
 
-  <footer>
+  <footer class="rodape">
     <p>&copy; 2026 ONG Mãos Solidárias. Todos os direitos reservados.</p>
   </footer>
 </body>
