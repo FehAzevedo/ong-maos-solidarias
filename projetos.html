@@ -6,15 +6,22 @@
   <meta name="description" content="Conheça os projetos sociais da ONG Mãos Solidárias na zona leste de São Paulo.">
   <title>Nossos Projetos | ONG Mãos Solidárias</title>
   <link rel="stylesheet" href="css/estilo.css">
+  <script src="js/menu.js" defer></script>
 </head>
 <body>
-  <header>
+  <a class="pular-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <header class="cabecalho">
     <picture>
       <source srcset="imagens/logo.webp" type="image/webp">
-      <img src="imagens/logo.png" alt="Logotipo da ONG Mãos Solidárias: duas mãos estendidas uma em direção à outra, com o nome da ONG entre elas" width="80" height="80">
+      <img class="cabecalho__logo" src="imagens/logo.png" alt="Logotipo da ONG Mãos Solidárias: duas mãos estendidas uma em direção à outra, com o nome da ONG entre elas" width="80" height="80">
     </picture>
     <p class="marca">ONG Mãos Solidárias</p>
-    <nav aria-label="Menu principal">
+    <button type="button" class="menu-botao" aria-expanded="false" aria-controls="menu-principal">
+      <span class="menu-botao__icone" aria-hidden="true"></span>
+      Menu
+    </button>
+    <nav id="menu-principal" class="menu" aria-label="Menu principal">
       <ul>
         <li><a href="index.html">Início</a></li>
         <li><a href="projetos.html" aria-current="page">Projetos</a></li>
@@ -23,11 +30,11 @@
     </nav>
   </header>
 
-  <main>
+  <main id="conteudo">
     <h1>Nossos Projetos</h1>
-    <p>Conheça as iniciativas que mantemos com o apoio de voluntários e doadores.</p>
+    <p class="introducao">Conheça as iniciativas que mantemos com o apoio de voluntários e doadores.</p>
 
-    <nav aria-label="Nesta página">
+    <nav class="navegacao-interna" aria-label="Nesta página">
       <ul>
         <li><a href="#em-andamento">Projetos em Andamento</a></li>
         <li><a href="#doacoes">Campanhas de Doação</a></li>
@@ -38,87 +45,92 @@
     <section id="em-andamento">
       <h2>Projetos em Andamento</h2>
 
-      <section id="cozinha-solidaria">
-        <h3>Cozinha Solidária</h3>
-        <figure>
-          <picture>
-            <source srcset="imagens/cozinha.webp" type="image/webp">
-            <img src="imagens/cozinha.jpg" alt="Cozinheira de máscara e avental segurando um prato de comida em frente ao fogão" width="800" height="533" loading="lazy">
-          </picture>
-          <figcaption>Refeição servida na Cozinha Solidária.</figcaption>
-        </figure>
-        <p>Oferece refeições nutritivas a famílias em situação de insegurança alimentar em Itaquera.</p>
-        <ul>
-          <li>Público: famílias cadastradas na região</li>
-          <li>Frequência: de segunda a sexta, no almoço</li>
-          <li>Resultado: mais de 300 refeições por dia</li>
-        </ul>
-      </section>
+      <div class="grade-cards">
+        <section id="cozinha-solidaria" class="card card--projeto">
+          <h3>Cozinha Solidária</h3>
+          <figure>
+            <picture>
+              <source srcset="imagens/cozinha.webp" type="image/webp">
+              <img src="imagens/cozinha.jpg" alt="Cozinheira de máscara e avental segurando um prato de comida em frente ao fogão" width="800" height="533" loading="lazy">
+            </picture>
+            <figcaption>Refeição servida na Cozinha Solidária.</figcaption>
+          </figure>
+          <p>Oferece refeições nutritivas a famílias em situação de insegurança alimentar em Itaquera.</p>
+          <ul>
+            <li>Público: famílias cadastradas na região</li>
+            <li>Frequência: de segunda a sexta, no almoço</li>
+            <li>Resultado: mais de 300 refeições por dia</li>
+          </ul>
+        </section>
 
-      <section id="reforco-escolar">
-        <h3>Reforço Escolar</h3>
-        <figure>
-          <picture>
-            <source srcset="imagens/reforco.webp" type="image/webp">
-            <img src="imagens/reforco.jpg" alt="Voluntária orientando um grupo de crianças em mesas ao ar livre" width="800" height="533" loading="lazy">
-          </picture>
-          <figcaption>Atividade de reforço escolar com a turma da tarde.</figcaption>
-        </figure>
-        <p>Aulas de apoio em português e matemática para crianças e adolescentes da rede pública.</p>
-        <ul>
-          <li>Público: estudantes de 7 a 14 anos</li>
-          <li>Frequência: três vezes por semana, no contraturno escolar</li>
-          <li>Resultado: 80 alunos atendidos por semestre</li>
-        </ul>
-      </section>
+        <section id="reforco-escolar" class="card card--projeto">
+          <h3>Reforço Escolar</h3>
+          <figure>
+            <picture>
+              <source srcset="imagens/reforco.webp" type="image/webp">
+              <img src="imagens/reforco.jpg" alt="Voluntária orientando um grupo de crianças em mesas ao ar livre" width="800" height="533" loading="lazy">
+            </picture>
+            <figcaption>Atividade de reforço escolar com a turma da tarde.</figcaption>
+          </figure>
+          <p>Aulas de apoio em português e matemática para crianças e adolescentes da rede pública.</p>
+          <ul>
+            <li>Público: estudantes de 7 a 14 anos</li>
+            <li>Frequência: três vezes por semana, no contraturno escolar</li>
+            <li>Resultado: 80 alunos atendidos por semestre</li>
+          </ul>
+        </section>
 
-      <section id="inclusao-digital">
-        <h3>Inclusão Digital</h3>
-        <figure>
-          <picture>
-            <source srcset="imagens/inclusao-digital.webp" type="image/webp">
-            <img src="imagens/inclusao-digital.jpg" alt="Voluntário ensinando uma senhora a usar um notebook, em uma sala com outros alunos" width="800" height="533" loading="lazy">
-          </picture>
-          <figcaption>Aula de informática básica para adultos e idosos.</figcaption>
-        </figure>
-        <p>Cursos de informática básica e uso de serviços digitais para jovens, adultos e idosos.</p>
-        <ul>
-          <li>Público: jovens a partir de 16 anos, adultos e idosos</li>
-          <li>Frequência: turmas aos sábados</li>
-          <li>Resultado: 120 alunos certificados em 2025</li>
-        </ul>
-      </section>
+        <section id="inclusao-digital" class="card card--projeto">
+          <h3>Inclusão Digital</h3>
+          <figure>
+            <picture>
+              <source srcset="imagens/inclusao-digital.webp" type="image/webp">
+              <img src="imagens/inclusao-digital.jpg" alt="Voluntário ensinando uma senhora a usar um notebook, em uma sala com outros alunos" width="800" height="533" loading="lazy">
+            </picture>
+            <figcaption>Aula de informática básica para adultos e idosos.</figcaption>
+          </figure>
+          <p>Cursos de informática básica e uso de serviços digitais para jovens, adultos e idosos.</p>
+          <ul>
+            <li>Público: jovens a partir de 16 anos, adultos e idosos</li>
+            <li>Frequência: turmas aos sábados</li>
+            <li>Resultado: 120 alunos certificados em 2025</li>
+          </ul>
+        </section>
+      </div>
     </section>
 
     <section id="doacoes">
       <h2>Campanhas de Doação</h2>
       <p>Toda doação é aplicada diretamente nos projetos e prestada em relatório anual.</p>
 
-      <section id="doacao-financeira">
-        <h3>Doação Financeira</h3>
-        <p>Contribua com qualquer valor pelo PIX. A chave é o nosso e-mail de doações:</p>
-        <p><strong>doacoes@maossolidarias.org.br</strong></p>
-        <p>Com R$ 50 garantimos 10 refeições na Cozinha Solidária.</p>
-      </section>
+      <div class="grade-cards">
+        <section id="doacao-financeira" class="card">
+          <h3>Doação Financeira</h3>
+          <p>Contribua com qualquer valor pelo PIX. A chave é o nosso e-mail de doações:</p>
+          <p class="chave-pix"><strong>doacoes@maossolidarias.org.br</strong></p>
+          <p>Com R$ 50 garantimos 10 refeições na Cozinha Solidária.</p>
+        </section>
 
-      <section id="doacao-itens">
-        <h3>Doação de Itens</h3>
-        <p>Recebemos doações na nossa sede, de segunda a sexta, das 9h às 17h:</p>
-        <ul>
-          <li>Alimentos não perecíveis</li>
-          <li>Material escolar</li>
-          <li>Computadores e notebooks em funcionamento</li>
-        </ul>
-      </section>
+        <section id="doacao-itens" class="card">
+          <h3>Doação de Itens</h3>
+          <p>Recebemos doações na nossa sede, de segunda a sexta, das 9h às 17h:</p>
+          <ul>
+            <li>Alimentos não perecíveis</li>
+            <li>Material escolar</li>
+            <li>Computadores e notebooks em funcionamento</li>
+          </ul>
+        </section>
+      </div>
     </section>
 
-    <section id="voluntariado">
+    <section id="voluntariado" class="chamada">
       <h2>Voluntariado</h2>
-      <p>Todos os projetos dependem de voluntários. <a href="cadastro.html">Cadastre-se e escolha onde atuar</a>.</p>
+      <p>Todos os projetos dependem de voluntários. Escolha onde quer atuar e faça parte da equipe.</p>
+      <a class="botao botao--destaque" href="cadastro.html">Cadastre-se como voluntário</a>
     </section>
   </main>
 
-  <footer>
+  <footer class="rodape">
     <p>&copy; 2026 ONG Mãos Solidárias. Todos os direitos reservados.</p>
   </footer>
 </body>

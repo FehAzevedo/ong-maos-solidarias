@@ -1,180 +1,949 @@
-/* Base */
-* {
+/* =====================================================================
+   ONG Mãos Solidárias: folha de estilos principal
+   Experiência Prática II: Design System e layout responsivo
+
+   Sumário
+    1. Design System (variáveis)
+    2. Base
+    3. Tipografia
+    4. Acessibilidade
+    5. Botões
+    6. Cabeçalho e menu de navegação
+    7. Layout do conteúdo
+    8. Cards e grades
+    9. Página inicial
+   10. Página de projetos
+   11. Formulário de cadastro
+   12. Rodapé
+
+   Abordagem mobile-first. Pontos de quebra (media queries não aceitam
+   variáveis CSS, por isso ficam documentados aqui):
+     - 600px: tablet (grades de 2 colunas, títulos maiores)
+     - 900px: desktop (menu horizontal, "Quem Somos" em 2 colunas)
+   ===================================================================== */
+
+
+/* =====================================================================
+   1. DESIGN SYSTEM
+   Todas as decisões visuais passam por estas variáveis. Nenhuma cor,
+   tamanho de fonte ou espaçamento é escrito "solto" no restante do arquivo.
+   ===================================================================== */
+:root {
+  /* ---------- Cores primárias: vinho extraído do logotipo ---------- */
+  --cor-primaria: #9b0522;          /* links, botões, cabeçalho: 8,6:1 sobre branco */
+  --cor-primaria-escura: #6e0418;   /* hover, títulos, rodapé: 12,4:1 sobre branco */
+  --cor-primaria-clara: #fbeef0;    /* fundo de áreas de destaque e itens selecionados */
+
+  /* ---------- Cores secundárias: tons terrosos das mãos do logotipo ---------- */
+  --cor-secundaria: #8c492c;        /* marcadores e detalhes: 6,8:1 sobre branco */
+  --cor-secundaria-escura: #5d1f08; /* textos de apoio em áreas de destaque */
+
+  /* ---------- Cor de destaque: amarelo solidário (chamadas para ação) ---------- */
+  --cor-destaque: #f2b705;          /* botão "Doar", indicador da página atual, foco */
+  --cor-destaque-escura: #d9a404;   /* hover do botão de destaque */
+
+  /* ---------- Neutras (quentes, para conversar com o vinho) ---------- */
+  --cor-texto: #2b1d1a;             /* texto principal: 16,2:1 sobre branco */
+  --cor-texto-suave: #5c4f4b;       /* legendas e dicas: 7,8:1 sobre branco */
+  --cor-borda: #e3d9d5;             /* divisórias decorativas */
+  --cor-borda-forte: #7a6a65;       /* bordas de campos: 5,1:1 (mínimo WCAG 3:1) */
+  --cor-fundo: #faf6f4;             /* fundo da página */
+  --cor-superficie: #ffffff;        /* cards, campos e formulários */
+
+  /* ---------- Feedback ---------- */
+  --cor-sucesso: #1f6f50;           /* 6,1:1 sobre branco */
+  --cor-sucesso-fundo: #e8f3ee;
+  --cor-erro: #c4320a;              /* laranja-avermelhado, distinto do vinho: 5,5:1 */
+  --cor-erro-fundo: #fff1ec;
+
+  /* ---------- Transparências (rgba) ---------- */
+  --cor-sombra: rgba(43, 29, 26, 0.12);
+  --cor-sobreposicao-clara: rgba(255, 255, 255, 0.14);  /* hover no cabeçalho vinho */
+  --cor-borda-clara: rgba(255, 255, 255, 0.6);          /* borda do botão Menu */
+
+  /* ---------- Tipografia ---------- */
+  /* Fontes do sistema: nenhum download extra, bom para conexões limitadas */
+  --fonte-base: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* Escala modular "terça maior" (razão 1,25) a partir de 16px */
+  --fs-1: 1rem;      /* 16px: corpo do texto, campos e botões */
+  --fs-2: 1.25rem;   /* 20px: h3, nome da marca, texto de destaque */
+  --fs-3: 1.563rem;  /* 25px: h2 no celular, títulos de seções do formulário */
+  --fs-4: 1.953rem;  /* 31px: h1 no celular, h2 no desktop, números de impacto */
+  --fs-5: 2.441rem;  /* 39px: h1 no desktop */
+  --fs-pequeno: 0.875rem; /* 14px: auxiliar para legendas e rodapé (nunca abaixo disso) */
+
+  --peso-normal: 400;
+  --peso-medio: 600;
+  --peso-negrito: 700;
+
+  --altura-linha-texto: 1.6;   /* conforto de leitura em parágrafos */
+  --altura-linha-titulo: 1.2;
+  --largura-leitura: 65ch;     /* linhas longas demais cansam a leitura */
+
+  /* ---------- Espaçamentos: escala modular de base 8px ---------- */
+  --esp-1: 0.25rem;  /*  4px (meio passo, só para ajustes finos) */
+  --esp-2: 0.5rem;   /*  8px */
+  --esp-3: 1rem;     /* 16px */
+  --esp-4: 1.5rem;   /* 24px */
+  --esp-5: 2rem;     /* 32px */
+  --esp-6: 3rem;     /* 48px */
+  --esp-7: 4rem;     /* 64px */
+
+  /* ---------- Bordas, sombras e movimento ---------- */
+  --raio-sm: 4px;
+  --raio-md: 8px;
+  --raio-lg: 16px;
+  --raio-pilula: 999px;
+
+  --sombra-1: 0 1px 3px var(--cor-sombra);
+  --sombra-2: 0 8px 24px var(--cor-sombra);
+
+  --transicao: 200ms ease;
+
+  /* ---------- Layout ---------- */
+  --largura-max: 1120px;
+  --alvo-toque: 48px;   /* área mínima de toque recomendada para botões e links */
+}
+
+
+/* =====================================================================
+   2. BASE
+   ===================================================================== */
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  line-height: 1.6;
-  color: #222;
-  background: #fff;
+  font-family: var(--fonte-base);
+  font-size: var(--fs-1);
+  line-height: var(--altura-linha-texto);
+  color: var(--cor-texto);
+  background: var(--cor-fundo);
 }
 
 /* Imagens responsivas: width/height no HTML reservam o espaço, o CSS adapta */
 img {
+  display: block;
   max-width: 100%;
   height: auto;
 }
 
-/* Cabeçalho e navegação */
-header {
+a {
+  color: var(--cor-primaria);
+  text-underline-offset: 0.2em;
+  transition: color var(--transicao);
+}
+
+a:hover {
+  color: var(--cor-primaria-escura);
+  text-decoration-thickness: 2px;
+}
+
+
+/* =====================================================================
+   3. TIPOGRAFIA
+   ===================================================================== */
+h1,
+h2,
+h3 {
+  margin: 0 0 var(--esp-3);
+  line-height: var(--altura-linha-titulo);
+  color: var(--cor-primaria-escura);
+}
+
+h1 {
+  font-size: var(--fs-4);
+}
+
+h2 {
+  font-size: var(--fs-3);
+}
+
+h3 {
+  font-size: var(--fs-2);
+  color: var(--cor-texto);
+}
+
+p,
+ul {
+  margin: 0 0 var(--esp-3);
+}
+
+p {
+  max-width: var(--largura-leitura);
+}
+
+small,
+figcaption {
+  font-size: var(--fs-pequeno);
+  color: var(--cor-texto-suave);
+}
+
+.introducao {
+  font-size: var(--fs-2);
+  color: var(--cor-texto-suave);
+}
+
+@media (min-width: 600px) {
+  h1 {
+    font-size: var(--fs-5);
+  }
+
+  h2 {
+    font-size: var(--fs-4);
+  }
+}
+
+
+/* =====================================================================
+   4. ACESSIBILIDADE
+   ===================================================================== */
+
+/* Link "Pular para o conteúdo": invisível até receber foco pelo teclado */
+.pular-link {
+  position: absolute;
+  top: var(--esp-2);
+  left: var(--esp-2);
+  z-index: 10;
+  padding: var(--esp-2) var(--esp-3);
+  border-radius: var(--raio-md);
+  background: var(--cor-destaque);
+  color: var(--cor-texto);
+  font-weight: var(--peso-negrito);
+  transform: translateY(-200%);
+  transition: transform var(--transicao);
+}
+
+.pular-link:focus {
+  transform: translateY(0);
+}
+
+/* Foco em dois tons: o anel escuro aparece sobre fundos claros e o amarelo
+   sobre o vinho. Assim o foco sempre tem contraste de pelo menos 3:1. */
+:focus-visible {
+  outline: 3px solid var(--cor-texto);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--cor-destaque);
+}
+
+/* Respeita quem configurou o sistema para reduzir animações */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+/* =====================================================================
+   5. BOTÕES
+   ===================================================================== */
+.botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--esp-2);
+  min-height: var(--alvo-toque);
+  padding: var(--esp-2) var(--esp-4);
+  border: 2px solid transparent;
+  border-radius: var(--raio-md);
+  background: var(--cor-primaria);
+  color: var(--cor-superficie);
+  font: inherit;
+  font-weight: var(--peso-medio);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--transicao), border-color var(--transicao), transform var(--transicao);
+}
+
+.botao:hover {
+  background: var(--cor-primaria-escura);
+  color: var(--cor-superficie);
+}
+
+.botao:active {
+  transform: translateY(1px);
+}
+
+/* Chamada principal para doação: amarelo com texto escuro (8,2:1) */
+.botao--destaque {
+  background: var(--cor-destaque);
+  color: var(--cor-texto);
+}
+
+.botao--destaque:hover {
+  background: var(--cor-destaque-escura);
+  color: var(--cor-texto);
+}
+
+/* Ação secundária (ex.: limpar formulário) */
+.botao--neutro {
+  border-color: var(--cor-borda-forte);
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+}
+
+.botao--neutro:hover {
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+}
+
+.acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-3);
+}
+
+
+/* =====================================================================
+   6. CABEÇALHO E MENU DE NAVEGAÇÃO
+   ===================================================================== */
+.cabecalho {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem;
-  background: #1f6f50;
-  color: #fff;
+  gap: var(--esp-2) var(--esp-3);
+  /* Conteúdo alinhado à largura máxima, fundo ocupando a tela inteira */
+  padding: var(--esp-3) max(var(--esp-3), calc((100% - var(--largura-max)) / 2));
+  background: var(--cor-primaria);
+  color: var(--cor-superficie);
 }
 
-header h1,
-header .marca {
+.cabecalho__logo {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--raio-md);
+  background: var(--cor-superficie);
+}
+
+.marca {
+  flex: 1;
   margin: 0;
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-size: var(--fs-2);
+  font-weight: var(--peso-negrito);
+  line-height: var(--altura-linha-titulo);
+  color: var(--cor-superficie);
 }
 
-nav ul {
+/* Botão "Menu": só aparece quando o JavaScript ativa o menu recolhível */
+.menu-botao {
+  display: none;
+}
+
+.menu-recolhivel .menu-botao {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-2);
+  min-height: var(--alvo-toque);
+  padding: var(--esp-2) var(--esp-3);
+  border: 2px solid var(--cor-borda-clara);
+  border-radius: var(--raio-md);
+  background: transparent;
+  color: var(--cor-superficie);
+  font: inherit;
+  font-weight: var(--peso-medio);
+  cursor: pointer;
+}
+
+/* Ícone "hambúrguer" desenhado em CSS: três linhas que viram um X */
+.menu-botao__icone,
+.menu-botao__icone::before,
+.menu-botao__icone::after {
+  display: block;
+  width: 20px;
+  height: 2px;
+  border-radius: var(--raio-sm);
+  background: currentColor;
+  transition: transform var(--transicao), background-color var(--transicao);
+}
+
+.menu-botao__icone {
+  position: relative;
+}
+
+.menu-botao__icone::before,
+.menu-botao__icone::after {
+  content: "";
+  position: absolute;
+  left: 0;
+}
+
+.menu-botao__icone::before {
+  top: -6px;
+}
+
+.menu-botao__icone::after {
+  top: 6px;
+}
+
+.menu-botao[aria-expanded="true"] .menu-botao__icone {
+  background: transparent;
+}
+
+.menu-botao[aria-expanded="true"] .menu-botao__icone::before {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.menu-botao[aria-expanded="true"] .menu-botao__icone::after {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+/* No celular o menu ocupa uma linha inteira abaixo da marca */
+.menu {
+  flex-basis: 100%;
+}
+
+.menu-recolhivel .menu-botao[aria-expanded="false"] + .menu {
+  display: none;
+}
+
+.menu ul {
   display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
+  flex-direction: column;
+  gap: var(--esp-1);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-nav a {
-  color: #fff;
-}
-
-nav a[aria-current="page"] {
-  font-weight: bold;
+.menu a {
+  display: flex;
+  align-items: center;
+  min-height: var(--alvo-toque);
+  padding: var(--esp-2) var(--esp-3);
+  border-radius: var(--raio-md);
+  color: var(--cor-superficie);
+  font-weight: var(--peso-medio);
   text-decoration: none;
+  transition: background-color var(--transicao);
 }
 
-/* Conteúdo */
+.menu a:hover {
+  background: var(--cor-sobreposicao-clara);
+  color: var(--cor-superficie);
+}
+
+/* Página atual: barra amarela, não depende só de cor do texto */
+.menu a[aria-current="page"] {
+  background: var(--cor-sobreposicao-clara);
+  box-shadow: inset 4px 0 0 var(--cor-destaque);
+}
+
+@media (min-width: 900px) {
+  .menu-recolhivel .menu-botao {
+    display: none;
+  }
+
+  .menu,
+  .menu-recolhivel .menu-botao[aria-expanded="false"] + .menu {
+    display: block;
+    flex-basis: auto;
+  }
+
+  .menu ul {
+    flex-direction: row;
+  }
+
+  .menu a[aria-current="page"] {
+    box-shadow: inset 0 -4px 0 var(--cor-destaque);
+  }
+}
+
+
+/* =====================================================================
+   7. LAYOUT DO CONTEÚDO
+   ===================================================================== */
 main {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 1rem;
+  flex: 1;
+  width: 100%;
+  max-width: var(--largura-max);
+  margin-inline: auto;
+  padding: var(--esp-5) var(--esp-3) var(--esp-6);
+}
+
+main > section {
+  margin-bottom: var(--esp-6);
+}
+
+main > section:last-child {
+  margin-bottom: 0;
+}
+
+/* Traço amarelo sob os títulos das seções: marca visual recorrente */
+main > section > h2::after {
+  content: "";
+  display: block;
+  width: var(--esp-6);
+  height: var(--esp-1);
+  margin-top: var(--esp-2);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-destaque);
 }
 
 figure {
-  margin: 1rem 0;
+  margin: 0 0 var(--esp-3);
+}
+
+figure img {
+  border-radius: var(--raio-lg);
 }
 
 figcaption {
-  font-size: 0.9rem;
-  color: #555;
+  margin-top: var(--esp-2);
 }
 
-/* Formulário */
-fieldset {
-  margin: 0 0 1.5rem;
-  padding: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+address {
+  font-style: normal;
 }
 
-fieldset fieldset {
-  margin-bottom: 1rem;
+
+/* =====================================================================
+   8. CARDS E GRADES
+   ===================================================================== */
+
+/* Grade fluida: quantas colunas couberem com no mínimo 280px cada,
+   sem precisar de media query */
+.grade-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: var(--esp-4);
 }
 
-legend h2,
-legend h3 {
+.card {
+  display: flex;
+  flex-direction: column;
+  padding: var(--esp-4);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-lg);
+  background: var(--cor-superficie);
+  box-shadow: var(--sombra-1);
+}
+
+.card > :last-child {
+  margin-bottom: 0;
+}
+
+.card ul {
+  padding-left: var(--esp-4);
+}
+
+.card li::marker {
+  color: var(--cor-secundaria);
+}
+
+/* Card de projeto: imagem de borda a borda no topo */
+.card--projeto {
+  padding: 0;
+  overflow: hidden;
+  transition: box-shadow var(--transicao), transform var(--transicao);
+}
+
+.card--projeto:hover {
+  box-shadow: var(--sombra-2);
+  transform: translateY(calc(var(--esp-1) * -1));
+}
+
+.card--projeto > * {
+  margin-inline: var(--esp-4);
+}
+
+/* No HTML a figura vem depois do título; visualmente ela sobe para o topo */
+.card--projeto > figure {
+  order: -1;
+  margin: 0 0 var(--esp-3);
+}
+
+.card--projeto img {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+.card--projeto figcaption {
+  padding-inline: var(--esp-4);
+}
+
+.card--projeto ul {
+  padding: var(--esp-3) 0 0 var(--esp-4);
+  border-top: 1px solid var(--cor-borda);
+  font-size: var(--fs-pequeno);
+  color: var(--cor-texto-suave);
+}
+
+.card--projeto > :last-child {
+  margin-bottom: var(--esp-4);
+}
+
+
+/* =====================================================================
+   9. PÁGINA INICIAL
+   ===================================================================== */
+.destaque {
+  display: grid;
+  gap: var(--esp-4);
+  padding: var(--esp-5) var(--esp-4);
+  border-radius: var(--raio-lg);
+  background: var(--cor-primaria-clara);
+}
+
+.destaque h2,
+.destaque p {
   margin: 0;
-  padding: 0 0.25rem;
+}
+
+.destaque p {
+  font-size: var(--fs-2);
+  color: var(--cor-secundaria-escura);
+}
+
+.indicadores {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+  gap: var(--esp-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.indicadores li {
+  padding: var(--esp-3);
+  border-top: var(--esp-1) solid var(--cor-destaque);
+  border-radius: var(--raio-md);
+  background: var(--cor-superficie);
+  font-size: var(--fs-pequeno);
+  color: var(--cor-texto-suave);
+}
+
+.indicadores strong {
+  display: block;
+  font-size: var(--fs-4);
+  line-height: var(--altura-linha-titulo);
+  color: var(--cor-primaria);
+}
+
+@media (min-width: 900px) {
+  .destaque {
+    padding: var(--esp-6) var(--esp-6);
+  }
+
+  /* "Quem Somos": texto à esquerda, foto à direita */
+  .sobre {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr;
+    column-gap: var(--esp-6);
+    align-items: start;
+  }
+
+  .sobre > figure {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    margin: 0;
+  }
+}
+
+
+/* =====================================================================
+   10. PÁGINA DE PROJETOS
+   ===================================================================== */
+.navegacao-interna ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-2);
+  margin: 0 0 var(--esp-6);
+  padding: 0;
+  list-style: none;
+}
+
+.navegacao-interna a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--alvo-toque);
+  padding: var(--esp-2) var(--esp-4);
+  border: 2px solid var(--cor-primaria);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-superficie);
+  font-weight: var(--peso-medio);
+  text-decoration: none;
+  transition: background-color var(--transicao), color var(--transicao);
+}
+
+.navegacao-interna a:hover {
+  background: var(--cor-primaria);
+  color: var(--cor-superficie);
+}
+
+/* Chave PIX: caixa fácil de localizar e de selecionar para copiar */
+.chave-pix {
+  padding: var(--esp-2) var(--esp-3);
+  border: 2px dashed var(--cor-secundaria);
+  border-radius: var(--raio-md);
+  background: var(--cor-fundo);
+  overflow-wrap: anywhere;
+  color: var(--cor-secundaria-escura);
+}
+
+/* Chamada para o voluntariado: faixa vinho no fim da página */
+.chamada {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: var(--esp-5) var(--esp-4);
+  border-radius: var(--raio-lg);
+  background: var(--cor-primaria);
+  color: var(--cor-superficie);
+}
+
+.chamada h2 {
+  color: var(--cor-superficie);
+}
+
+.chamada p {
+  margin-bottom: var(--esp-4);
+}
+
+@media (min-width: 900px) {
+  .chamada {
+    padding: var(--esp-6);
+  }
+}
+
+
+/* =====================================================================
+   11. FORMULÁRIO DE CADASTRO
+   ===================================================================== */
+.formulario {
+  display: grid;
+  gap: var(--esp-4);
+  max-width: 800px;
+}
+
+/* Cada grupo de dados vira um card */
+.formulario > fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: var(--esp-4);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-lg);
+  background: var(--cor-superficie);
+  box-shadow: var(--sombra-1);
+}
+
+/* A legenda flutuante fica dentro do card em vez de "cortar" a borda */
+.formulario legend {
+  float: left;
+  width: 100%;
+  margin-bottom: var(--esp-3);
+  padding: 0;
+}
+
+.formulario legend + * {
+  clear: both;
+}
+
+.formulario legend h2 {
+  margin: 0;
+  font-size: var(--fs-3);
+}
+
+.formulario legend h3 {
+  margin: 0;
+  font-size: var(--fs-1);
+}
+
+/* Grupos internos (checkbox/radio) não repetem o visual de card */
+.grupo-opcoes {
+  min-width: 0;
+  margin: 0 0 var(--esp-4);
+  padding: 0;
+  border: 0;
+}
+
+.grupo-opcoes legend {
+  margin-bottom: var(--esp-2);
+}
+
+/* Campos em 1 coluna no celular e 2 colunas a partir do tablet */
+.grade-campos {
+  display: grid;
+  gap: var(--esp-3) var(--esp-4);
 }
 
 .campo {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-  margin-bottom: 1rem;
+  gap: var(--esp-1);
 }
 
-.campo small {
-  color: #555;
+.campo label {
+  font-weight: var(--peso-medio);
 }
 
-input,
-select,
-textarea,
-button {
-  font: inherit;
+/* Asterisco de campo obrigatório */
+main span[aria-hidden="true"] {
+  color: var(--cor-erro);
+  font-weight: var(--peso-negrito);
 }
 
 input:not([type="checkbox"]):not([type="radio"]),
 select,
 textarea {
   width: 100%;
-  max-width: 480px;
-  padding: 0.5rem;
-  border: 1px solid #888;
-  border-radius: 4px;
+  min-height: var(--alvo-toque);
+  padding: var(--esp-2) var(--esp-3);
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-sm);
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+  font: inherit;
+  transition: border-color var(--transicao), background-color var(--transicao);
 }
 
-fieldset label {
-  display: block;
-  margin-bottom: 0.25rem;
+textarea {
+  min-height: calc(var(--esp-7) * 2);
+  resize: vertical;
 }
 
-.campo label {
-  font-weight: bold;
+input::placeholder,
+textarea::placeholder {
+  color: var(--cor-texto-suave);
+  opacity: 1;
 }
 
-.campo-termos label {
-  font-weight: normal;
+input:hover,
+select:hover,
+textarea:hover {
+  border-color: var(--cor-texto);
 }
 
-input:focus,
-select:focus,
-textarea:focus,
-button:focus {
-  outline: 3px solid #f2b705;
-  outline-offset: 2px;
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  border-color: var(--cor-primaria);
 }
 
-/* Destaca erro só depois que o usuário interage com o campo */
+/* Feedback dinâmico: só aparece depois que a pessoa interage com o campo */
+input:user-valid,
+select:user-valid,
+textarea:user-valid {
+  border-color: var(--cor-sucesso);
+}
+
 input:user-invalid,
 select:user-invalid,
 textarea:user-invalid {
-  border-color: #c0392b;
-  background: #fdf0ee;
+  border: 2px solid var(--cor-erro);
+  background: var(--cor-erro-fundo);
 }
 
-.acoes {
+input[type="checkbox"],
+input[type="radio"] {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0;
+  accent-color: var(--cor-primaria);
+}
+
+/* Checkbox e radio como "cartões" clicáveis: área de toque maior */
+.opcoes {
+  display: grid;
+  gap: var(--esp-2);
+}
+
+.opcoes label {
   display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
+  align-items: center;
+  gap: var(--esp-2);
+  min-height: var(--alvo-toque);
+  padding: var(--esp-2) var(--esp-3);
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-md);
+  background: var(--cor-superficie);
+  cursor: pointer;
+  transition: background-color var(--transicao), border-color var(--transicao);
 }
 
-button {
-  padding: 0.6rem 1.2rem;
-  border: none;
-  border-radius: 4px;
+.opcoes label:hover {
+  border-color: var(--cor-primaria);
+}
+
+/* Opção marcada: muda fundo, borda e peso (não só a cor) */
+.opcoes label:has(:checked) {
+  border: 2px solid var(--cor-primaria);
+  background: var(--cor-primaria-clara);
+  color: var(--cor-primaria-escura);
+  font-weight: var(--peso-medio);
+}
+
+.campo-termos label {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--esp-2);
   cursor: pointer;
 }
 
-button[type="submit"] {
-  background: #1f6f50;
-  color: #fff;
+.campo-termos input {
+  margin-top: var(--esp-1);
 }
 
-button[type="reset"] {
-  background: #ddd;
-  color: #222;
+/* Mensagem de envio: continua no DOM (region "status") mesmo vazia,
+   para que leitores de tela anunciem o texto quando ele aparecer */
+.mensagem-status {
+  margin: 0;
 }
 
-#mensagem-status {
-  font-weight: bold;
-  color: #1f6f50;
+.mensagem-status:not(:empty) {
+  padding: var(--esp-3);
+  border-left: var(--esp-1) solid var(--cor-sucesso);
+  border-radius: var(--raio-sm);
+  background: var(--cor-sucesso-fundo);
+  color: var(--cor-sucesso);
+  font-weight: var(--peso-negrito);
 }
 
-/* Rodapé */
-footer {
-  padding: 1rem;
+@media (min-width: 600px) {
+  .grade-campos {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .campo--largo {
+    grid-column: 1 / -1;
+  }
+
+  .opcoes {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+
+/* =====================================================================
+   12. RODAPÉ
+   ===================================================================== */
+.rodape {
+  padding: var(--esp-5) max(var(--esp-3), calc((100% - var(--largura-max)) / 2));
+  background: var(--cor-primaria-escura);
+  color: var(--cor-superficie);
+  font-size: var(--fs-pequeno);
   text-align: center;
-  background: #eee;
+}
+
+.rodape p {
+  max-width: none;
+  margin: 0;
 }
