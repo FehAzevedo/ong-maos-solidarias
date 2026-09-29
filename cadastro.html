@@ -7,6 +7,7 @@
   <title>Seja Voluntário | ONG Mãos Solidárias</title>
   <link rel="stylesheet" href="css/estilo.css">
   <script src="js/menu.js" defer></script>
+  <script src="js/feedback.js" defer></script>
   <script src="js/mascaras.js" defer></script>
 </head>
 <body>
@@ -42,6 +43,14 @@
   <main id="conteudo">
     <h1>Seja Voluntário</h1>
     <p class="introducao">Preencha o formulário abaixo. Campos marcados com <span aria-hidden="true">*</span> são obrigatórios.</p>
+
+    <div class="alerta alerta--aviso formulario-alerta" role="note">
+      <span class="alerta__icone" aria-hidden="true">!</span>
+      <div>
+        <p class="alerta__titulo">Antes de começar</p>
+        <p>É preciso ter pelo menos 16 anos. Seus dados serão usados apenas para contato sobre o voluntariado.</p>
+      </div>
+    </div>
 
     <form id="form-cadastro" class="formulario" action="#" method="post">
       <fieldset>
@@ -208,8 +217,19 @@
     </form>
   </main>
 
+  <dialog id="modal-cadastro" class="modal" aria-labelledby="modal-cadastro-titulo">
+    <span class="modal__icone" aria-hidden="true">✓</span>
+    <h2 id="modal-cadastro-titulo">Cadastro recebido!</h2>
+    <p>Obrigado por querer fazer parte da Mãos Solidárias. Nossa equipe vai entrar em contato em breve para combinar sua primeira atividade.</p>
+    <form method="dialog" class="acoes">
+      <button type="submit" class="botao">Fechar</button>
+      <a class="botao botao--neutro" href="projetos.html">Conhecer os projetos</a>
+    </form>
+  </dialog>
+
   <footer class="rodape">
     <p>&copy; 2026 ONG Mãos Solidárias. Todos os direitos reservados.</p>
+    <p><a href="componentes.html">Guia de componentes</a></p>
   </footer>
 </body>
 </html>

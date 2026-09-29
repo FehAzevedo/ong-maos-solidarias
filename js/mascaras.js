@@ -103,8 +103,19 @@ document.addEventListener('DOMContentLoaded', function () {
       botaoEnviar.disabled = false;
       botaoEnviar.textContent = textoBotao;
       status.textContent = 'Cadastro enviado com sucesso! Entraremos em contato em breve.';
+      abrirModal('modal-cadastro');
     }, 1500);
   });
+
+  // Tentativa de envio com campos inválidos: o navegador dispara "invalid" em
+  // cada campo com problema; um único toast resume o que fazer.
+  let avisoPendente = false;
+  form.addEventListener('invalid', function () {
+    if (avisoPendente) return;
+    avisoPendente = true;
+    mostrarToast('Alguns campos precisam de atenção. Confira os itens destacados em vermelho.', 'erro');
+    setTimeout(function () { avisoPendente = false; });
+  }, true);
 
   form.addEventListener('reset', function () {
     status.textContent = '';
