@@ -86,11 +86,24 @@ document.addEventListener('DOMContentLoaded', function () {
   projetos.forEach(function (p) { p.addEventListener('change', validarProjetos); });
   validarProjetos();
 
-  // O evento submit só dispara quando todas as validações nativas passam
+  // O evento submit só dispara quando todas as validações nativas passam.
+  // Simula o envio: o botão fica desabilitado (estado :disabled no CSS)
+  // enquanto "envia", evitando cadastros duplicados por cliques repetidos.
+  const botaoEnviar = form.querySelector('button[type="submit"]');
+  const textoBotao = botaoEnviar.textContent;
+
   form.addEventListener('submit', function (evento) {
     evento.preventDefault();
-    form.reset();
-    status.textContent = 'Cadastro enviado com sucesso! Entraremos em contato em breve.';
+    botaoEnviar.disabled = true;
+    botaoEnviar.textContent = 'Enviando...';
+    status.textContent = '';
+
+    setTimeout(function () {
+      form.reset();
+      botaoEnviar.disabled = false;
+      botaoEnviar.textContent = textoBotao;
+      status.textContent = 'Cadastro enviado com sucesso! Entraremos em contato em breve.';
+    }, 1500);
   });
 
   form.addEventListener('reset', function () {

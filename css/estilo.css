@@ -66,6 +66,10 @@
   --cor-erro: #c4320a;              /* laranja-avermelhado, distinto do vinho: 5,5:1 */
   --cor-erro-fundo: #fff1ec;
 
+  /* Ícones de validação dos campos (SVG embutido, cores = sucesso e erro) */
+  --icone-sucesso: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231f6f50' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E");
+  --icone-erro: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%23c4320a'/%3E%3Cpath d='M12 6.5v7' stroke='white' stroke-width='2.5' stroke-linecap='round'/%3E%3Ccircle cx='12' cy='17.25' r='1.5' fill='white'/%3E%3C/svg%3E");
+
   /* ---------- Transparências (rgba) ---------- */
   --cor-sombra: rgba(43, 29, 26, 0.12);
   --cor-sobreposicao-clara: rgba(255, 255, 255, 0.14);  /* hover no cabeçalho vinho */
@@ -270,6 +274,10 @@ figcaption {
 /* =====================================================================
    5. BOTÕES
    ===================================================================== */
+/* Estados dos botões, na ordem em que a pessoa interage:
+   padrão → :hover (mouse em cima) → :focus-visible (teclado)
+   → :active (clique pressionado) → :disabled (ação indisponível).
+   Todas as mudanças são suavizadas pela mesma transição de 200ms. */
 .botao {
   display: inline-flex;
   align-items: center;
@@ -285,16 +293,43 @@ figcaption {
   font-weight: var(--peso-medio);
   text-decoration: none;
   cursor: pointer;
-  transition: background-color var(--transicao), border-color var(--transicao), transform var(--transicao);
+  transition:
+    background-color var(--transicao),
+    border-color var(--transicao),
+    color var(--transicao),
+    box-shadow var(--transicao),
+    transform var(--transicao);
 }
 
-.botao:hover {
+/* :hover: fundo mais escuro, sombra e leve elevação */
+.botao:hover:not(:disabled) {
   background: var(--cor-primaria-escura);
   color: var(--cor-superficie);
+  box-shadow: var(--sombra-2);
+  transform: translateY(-2px);
 }
 
-.botao:active {
+/* :focus-visible: além do anel de foco global em dois tons (seção 4),
+   o botão recebe o mesmo realce do hover para não parecer inativo */
+.botao:focus-visible {
+  box-shadow: 0 0 0 2px var(--cor-destaque), var(--sombra-2);
+}
+
+/* :active: o botão "afunda" e perde a sombra, como um botão físico */
+.botao:active:not(:disabled) {
+  box-shadow: none;
   transform: translateY(1px);
+}
+
+/* :disabled: fundo e texto neutros, cursor de bloqueio e nenhuma reação
+   ao mouse (os estados acima usam :not(:disabled)) */
+.botao:disabled {
+  border-color: transparent;
+  background: var(--cor-borda);
+  color: var(--cor-texto-suave);
+  box-shadow: none;
+  transform: none;
+  cursor: not-allowed;
 }
 
 /* Chamada principal para doação: amarelo com texto escuro (8,2:1) */
@@ -303,7 +338,7 @@ figcaption {
   color: var(--cor-texto);
 }
 
-.botao--destaque:hover {
+.botao--destaque:hover:not(:disabled) {
   background: var(--cor-destaque-escura);
   color: var(--cor-texto);
 }
@@ -315,7 +350,8 @@ figcaption {
   color: var(--cor-texto);
 }
 
-.botao--neutro:hover {
+.botao--neutro:hover:not(:disabled) {
+  border-color: var(--cor-texto);
   background: var(--cor-fundo);
   color: var(--cor-texto);
 }
@@ -990,7 +1026,9 @@ main span[aria-hidden="true"] {
   font-weight: var(--peso-negrito);
 }
 
-input:not([type="checkbox"]):not([type="radio"]),
+/* :where() zera a especificidade do filtro de tipos, para que os estados
+   abaixo (:hover, :focus-visible, :user-valid, :user-invalid) prevaleçam */
+input:where(:not([type="checkbox"], [type="radio"])),
 select,
 textarea {
   width: 100%;
@@ -1027,7 +1065,11 @@ textarea:focus-visible {
   border-color: var(--cor-primaria);
 }
 
-/* Feedback dinâmico: só aparece depois que a pessoa interage com o campo */
+/* Feedback dinâmico de preenchimento.
+   :user-valid e :user-invalid só entram depois que a pessoa sai do campo
+   (ou tenta enviar), então ninguém vê erro antes de começar a digitar.
+   O erro nunca depende só da cor: muda a espessura da borda, o fundo,
+   aparece um ícone e uma mensagem em texto. */
 input:user-valid,
 select:user-valid,
 textarea:user-valid {
@@ -1038,7 +1080,35 @@ input:user-invalid,
 select:user-invalid,
 textarea:user-invalid {
   border: 2px solid var(--cor-erro);
-  background: var(--cor-erro-fundo);
+  background-color: var(--cor-erro-fundo);
+}
+
+/* Ícone ✓ ou ! dentro dos campos de texto, alinhado à direita */
+.campo input:is([type="text"], [type="email"], [type="tel"]) {
+  padding-right: var(--esp-6);
+  background-repeat: no-repeat;
+  background-position: right var(--esp-3) center;
+  background-size: 1.25rem;
+}
+
+.campo input:is([type="text"], [type="email"], [type="tel"]):user-valid {
+  background-image: var(--icone-sucesso);
+}
+
+.campo input:is([type="text"], [type="email"], [type="tel"]):user-invalid {
+  background-image: var(--icone-erro);
+}
+
+/* Rótulo e mensagem de erro do campo (:has olha para o campo lá dentro) */
+.campo:has(:user-invalid) label {
+  color: var(--cor-erro);
+}
+
+.campo:has(:user-invalid)::after {
+  content: "Confira o preenchimento deste campo.";
+  font-size: var(--fs-pequeno);
+  font-weight: var(--peso-medio);
+  color: var(--cor-erro);
 }
 
 input[type="checkbox"],
@@ -1089,6 +1159,29 @@ input[type="radio"] {
 
 .campo-termos input {
   margin-top: var(--esp-1);
+}
+
+/* Grupo de checkbox/radio sem nenhuma opção marcada após tentar enviar */
+.grupo-opcoes:has(:user-invalid) legend h3 {
+  color: var(--cor-erro);
+}
+
+.grupo-opcoes:has(:user-invalid) .opcoes label {
+  border: 2px solid var(--cor-erro);
+  background: var(--cor-erro-fundo);
+}
+
+.grupo-opcoes:has(:user-invalid)::after {
+  content: "Escolha pelo menos uma opção.";
+  display: block;
+  margin-top: var(--esp-2);
+  font-size: var(--fs-pequeno);
+  font-weight: var(--peso-medio);
+  color: var(--cor-erro);
+}
+
+.campo-termos:has(:user-invalid) label {
+  color: var(--cor-erro);
 }
 
 /* Mensagem de envio: continua no DOM (region "status") mesmo vazia,
