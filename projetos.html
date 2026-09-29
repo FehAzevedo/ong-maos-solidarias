@@ -7,6 +7,7 @@
   <title>Nossos Projetos | ONG Mãos Solidárias</title>
   <link rel="stylesheet" href="css/estilo.css">
   <script src="js/menu.js" defer></script>
+  <script src="js/feedback.js" defer></script>
 </head>
 <body>
   <a class="pular-link" href="#conteudo">Pular para o conteúdo</a>
@@ -56,6 +57,10 @@
       <div class="grade grade-cards grade-cards--tres">
         <section id="cozinha-solidaria" class="card card--projeto">
           <h3>Cozinha Solidária</h3>
+          <ul class="badges" aria-label="Categoria e situação">
+            <li class="badge">Alimentação</li>
+            <li class="badge badge--sucesso">Vagas abertas</li>
+          </ul>
           <figure>
             <picture>
               <source srcset="imagens/cozinha.webp" type="image/webp">
@@ -73,6 +78,10 @@
 
         <section id="reforco-escolar" class="card card--projeto">
           <h3>Reforço Escolar</h3>
+          <ul class="badges" aria-label="Categoria e situação">
+            <li class="badge">Educação</li>
+            <li class="badge badge--aviso">Poucas vagas</li>
+          </ul>
           <figure>
             <picture>
               <source srcset="imagens/reforco.webp" type="image/webp">
@@ -90,6 +99,10 @@
 
         <section id="inclusao-digital" class="card card--projeto">
           <h3>Inclusão Digital</h3>
+          <ul class="badges" aria-label="Categoria e situação">
+            <li class="badge">Tecnologia</li>
+            <li class="badge badge--neutro">Aos sábados</li>
+          </ul>
           <figure>
             <picture>
               <source srcset="imagens/inclusao-digital.webp" type="image/webp">
@@ -109,18 +122,28 @@
 
     <section id="doacoes">
       <h2>Campanhas de Doação</h2>
-      <p>Toda doação é aplicada diretamente nos projetos e prestada em relatório anual.</p>
+      <div class="alerta alerta--info" role="note">
+        <span class="alerta__icone" aria-hidden="true">i</span>
+        <div>
+          <p class="alerta__titulo">Transparência</p>
+          <p>Toda doação é aplicada diretamente nos projetos e prestada em relatório anual.</p>
+        </div>
+      </div>
 
       <div class="grade grade-cards">
         <section id="doacao-financeira" class="card">
           <h3>Doação Financeira</h3>
           <p>Contribua com qualquer valor pelo PIX. A chave é o nosso e-mail de doações:</p>
           <p class="chave-pix"><strong>doacoes@maossolidarias.org.br</strong></p>
+          <p><button type="button" class="botao" data-copiar="doacoes@maossolidarias.org.br">Copiar chave PIX</button></p>
           <p>Com R$ 50 garantimos 10 refeições na Cozinha Solidária.</p>
         </section>
 
         <section id="doacao-itens" class="card">
           <h3>Doação de Itens</h3>
+          <ul class="badges" aria-label="Situação">
+            <li class="badge badge--erro">Urgente: material escolar</li>
+          </ul>
           <p>Recebemos doações na nossa sede, de segunda a sexta, das 9h às 17h:</p>
           <ul>
             <li>Alimentos não perecíveis</li>
@@ -140,6 +163,7 @@
 
   <footer class="rodape">
     <p>&copy; 2026 ONG Mãos Solidárias. Todos os direitos reservados.</p>
+    <p><a href="componentes.html">Guia de componentes</a></p>
   </footer>
 </body>
 </html>

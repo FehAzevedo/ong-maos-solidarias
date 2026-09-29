@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Guia de componentes visuais da plataforma da ONG Mãos Solidárias.">
+  <title>Guia de Componentes | ONG Mãos Solidárias</title>
+  <link rel="stylesheet" href="css/estilo.css">
+  <script src="js/menu.js" defer></script>
+  <script src="js/feedback.js" defer></script>
+</head>
+<body>
+  <a class="pular-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <header class="cabecalho">
+    <picture>
+      <source srcset="imagens/logo.webp" type="image/webp">
+      <img class="cabecalho__logo" src="imagens/logo.png" alt="Logotipo da ONG Mãos Solidárias: duas mãos estendidas uma em direção à outra, com o nome da ONG entre elas" width="80" height="80">
+    </picture>
+    <p class="marca">ONG Mãos Solidárias</p>
+    <button type="button" class="menu-botao" aria-expanded="false" aria-controls="menu-principal">
+      <span class="menu-botao__icone" aria-hidden="true"></span>
+      Menu
+    </button>
+    <nav id="menu-principal" class="menu" aria-label="Menu principal">
+      <ul>
+        <li><a href="index.html">Início</a></li>
+        <li class="tem-submenu">
+          <a href="projetos.html">Projetos</a>
+          <ul class="submenu">
+            <li><a href="projetos.html#cozinha-solidaria">Cozinha Solidária</a></li>
+            <li><a href="projetos.html#reforco-escolar">Reforço Escolar</a></li>
+            <li><a href="projetos.html#inclusao-digital">Inclusão Digital</a></li>
+            <li><a href="projetos.html#doacoes">Como doar</a></li>
+          </ul>
+        </li>
+        <li><a href="cadastro.html">Seja Voluntário</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="conteudo">
+    <h1>Guia de Componentes</h1>
+    <p class="introducao">Referência visual dos componentes da plataforma. Para usar um componente, basta copiar a estrutura HTML e trocar a classe de variação.</p>
+
+    <section id="guia-botoes">
+      <h2>Botões</h2>
+      <p>Estados de interação. Nesta vitrine, hover, foco e ativo estão fixados para visualização.</p>
+      <div class="vitrine">
+        <button type="button" class="botao">Padrão</button>
+        <button type="button" class="botao demo-hover">Hover</button>
+        <button type="button" class="botao demo-foco">Foco</button>
+        <button type="button" class="botao demo-ativo">Ativo</button>
+        <button type="button" class="botao" disabled>Desabilitado</button>
+        <button type="button" class="botao botao--destaque">Destaque</button>
+        <button type="button" class="botao botao--neutro">Neutro</button>
+      </div>
+      <pre class="codigo"><code>&lt;button class="botao"&gt;Enviar&lt;/button&gt;
+&lt;a class="botao botao--destaque" href="..."&gt;Doar&lt;/a&gt;
+&lt;button class="botao botao--neutro"&gt;Limpar&lt;/button&gt;
+&lt;button class="botao" disabled&gt;Enviando...&lt;/button&gt;</code></pre>
+    </section>
+
+    <section id="guia-badges">
+      <h2>Badges</h2>
+      <p>Etiquetas curtas para categoria ou situação de um projeto, campanha ou vaga.</p>
+      <ul class="vitrine badges">
+        <li class="badge">Alimentação</li>
+        <li class="badge badge--sucesso">Vagas abertas</li>
+        <li class="badge badge--aviso">Poucas vagas</li>
+        <li class="badge badge--erro">Urgente</li>
+        <li class="badge badge--neutro">Aos sábados</li>
+      </ul>
+      <pre class="codigo"><code>&lt;span class="badge"&gt;Categoria&lt;/span&gt;
+&lt;span class="badge badge--sucesso | badge--aviso | badge--erro | badge--neutro"&gt;...&lt;/span&gt;</code></pre>
+    </section>
+
+    <section id="guia-alertas">
+      <h2>Alertas</h2>
+      <p>Mensagens fixas dentro da página. Use <code>role="alert"</code> para erros e <code>role="note"</code> para informações.</p>
+      <div class="vitrine vitrine--coluna">
+        <div class="alerta alerta--info" role="note">
+          <span class="alerta__icone" aria-hidden="true">i</span>
+          <div>
+            <p class="alerta__titulo">Informação</p>
+            <p>Toda doação é aplicada diretamente nos projetos e prestada em relatório anual.</p>
+          </div>
+        </div>
+        <div class="alerta alerta--sucesso" role="note">
+          <span class="alerta__icone" aria-hidden="true">✓</span>
+          <div>
+            <p class="alerta__titulo">Sucesso</p>
+            <p>Cadastro enviado com sucesso! Entraremos em contato em breve.</p>
+          </div>
+        </div>
+        <div class="alerta alerta--aviso" role="note">
+          <span class="alerta__icone" aria-hidden="true">!</span>
+          <div>
+            <p class="alerta__titulo">Atenção</p>
+            <p>É preciso ter pelo menos 16 anos para se cadastrar como voluntário.</p>
+          </div>
+        </div>
+        <div class="alerta alerta--erro" role="alert">
+          <span class="alerta__icone" aria-hidden="true">×</span>
+          <div>
+            <p class="alerta__titulo">Erro</p>
+            <p>Não foi possível enviar o cadastro. Verifique sua conexão e tente novamente.</p>
+          </div>
+        </div>
+      </div>
+      <pre class="codigo"><code>&lt;div class="alerta alerta--erro" role="alert"&gt;
+  &lt;span class="alerta__icone" aria-hidden="true"&gt;×&lt;/span&gt;
+  &lt;div&gt;
+    &lt;p class="alerta__titulo"&gt;Erro&lt;/p&gt;
+    &lt;p&gt;Mensagem&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    </section>
+
+    <section id="guia-toast">
+      <h2>Toast</h2>
+      <p>Notificação temporária no canto da tela. Some sozinha após 5 segundos e não bloqueia a página.</p>
+      <div class="vitrine vitrine--coluna">
+        <div class="toast toast--sucesso">
+          <span class="toast__icone" aria-hidden="true">✓</span>
+          <p class="toast__mensagem">Chave PIX copiada! Agora é só colar no app do seu banco.</p>
+        </div>
+        <div class="toast toast--aviso">
+          <span class="toast__icone" aria-hidden="true">!</span>
+          <p class="toast__mensagem">Restam poucas vagas no Reforço Escolar.</p>
+        </div>
+        <div class="toast toast--erro">
+          <span class="toast__icone" aria-hidden="true">×</span>
+          <p class="toast__mensagem">Alguns campos precisam de atenção.</p>
+        </div>
+        <div class="toast toast--info">
+          <span class="toast__icone" aria-hidden="true">i</span>
+          <p class="toast__mensagem">Novas turmas de Inclusão Digital aos sábados.</p>
+        </div>
+      </div>
+      <div class="acoes">
+        <button type="button" class="botao" data-toast="sucesso" data-mensagem="Chave PIX copiada! Agora é só colar no app do seu banco.">Testar toast de sucesso</button>
+        <button type="button" class="botao botao--neutro" data-toast="erro" data-mensagem="Alguns campos precisam de atenção.">Testar toast de erro</button>
+      </div>
+      <pre class="codigo"><code>mostrarToast('Mensagem', 'sucesso'); // sucesso | aviso | erro | info</code></pre>
+    </section>
+
+    <section id="guia-modal">
+      <h2>Modal</h2>
+      <p>Janela de confirmação sobre a página, feita com o elemento nativo <code>&lt;dialog&gt;</code>: o foco fica preso nela e a tecla Esc fecha.</p>
+      <div class="acoes">
+        <button type="button" class="botao" data-abrir-modal="modal-exemplo">Abrir modal de exemplo</button>
+      </div>
+      <pre class="codigo"><code>&lt;dialog id="modal-exemplo" class="modal" aria-labelledby="titulo"&gt;...&lt;/dialog&gt;
+abrirModal('modal-exemplo');</code></pre>
+    </section>
+  </main>
+
+  <dialog id="modal-exemplo" class="modal" aria-labelledby="modal-exemplo-titulo">
+    <span class="modal__icone" aria-hidden="true">✓</span>
+    <h2 id="modal-exemplo-titulo">Cadastro recebido!</h2>
+    <p>Obrigado por querer fazer parte da Mãos Solidárias. Nossa equipe vai entrar em contato em breve para combinar sua primeira atividade.</p>
+    <form method="dialog" class="acoes">
+      <button type="submit" class="botao">Fechar</button>
+      <a class="botao botao--neutro" href="projetos.html">Conhecer os projetos</a>
+    </form>
+  </dialog>
+
+  <footer class="rodape">
+    <p>&copy; 2026 ONG Mãos Solidárias. Todos os direitos reservados.</p>
+    <p><a href="componentes.html">Guia de componentes</a></p>
+  </footer>
+</body>
+</html>

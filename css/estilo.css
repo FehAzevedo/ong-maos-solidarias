@@ -15,7 +15,8 @@
    10. Página de projetos
    11. Formulário de cadastro
    12. Rodapé
-   13. Telas panorâmicas
+   13. Componentes de feedback (badges, alertas, toast, modal)
+   14. Telas panorâmicas
 
    Abordagem mobile-first: o estilo base atende celulares pequenos e cada
    @media (min-width) acrescenta comportamento para telas maiores.
@@ -65,6 +66,9 @@
   --cor-sucesso-fundo: #e8f3ee;
   --cor-erro: #c4320a;              /* laranja-avermelhado, distinto do vinho: 5,5:1 */
   --cor-erro-fundo: #fff1ec;
+  --cor-aviso-fundo: #fdf3d0;       /* alertas e badges de atenção */
+  --cor-sucesso-clara: #7ccfa8;     /* ícone de sucesso sobre o toast escuro: 8,8:1 */
+  --cor-erro-clara: #ff9a76;        /* ícone de erro sobre o toast escuro: 7,8:1 */
 
   /* Ícones de validação dos campos (SVG embutido, cores = sucesso e erro) */
   --icone-sucesso: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231f6f50' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E");
@@ -74,6 +78,8 @@
   --cor-sombra: rgba(43, 29, 26, 0.12);
   --cor-sobreposicao-clara: rgba(255, 255, 255, 0.14);  /* hover no cabeçalho vinho */
   --cor-borda-clara: rgba(255, 255, 255, 0.6);          /* borda do botão Menu */
+  --cor-sombra-forte: rgba(43, 29, 26, 0.24);
+  --cor-sobreposicao-escura: rgba(43, 29, 26, 0.6);      /* fundo atrás do modal */
 
   /* ---------- Tipografia ---------- */
   /* Fontes do sistema: nenhum download extra, bom para conexões limitadas */
@@ -112,6 +118,7 @@
 
   --sombra-1: 0 1px 3px var(--cor-sombra);
   --sombra-2: 0 8px 24px var(--cor-sombra);
+  --sombra-3: 0 16px 40px var(--cor-sombra-forte);   /* toast e modal */
 
   --transicao: 200ms ease;
 
@@ -145,6 +152,7 @@ body {
     "conteudo"
     "rodape";
   grid-template-rows: auto 1fr auto;
+  grid-template-columns: minmax(0, 1fr);  /* conteúdo largo (ex.: código) não alarga a página */
   min-height: 100vh;
   margin: 0;
   font-family: var(--fonte-base);
@@ -730,7 +738,7 @@ address {
   margin-bottom: 0;
 }
 
-.card ul {
+.card ul:not(.badges) {
   padding-left: var(--esp-4);
 }
 
@@ -771,7 +779,7 @@ address {
   padding-inline: var(--esp-4);
 }
 
-.card--projeto ul {
+.card--projeto ul:not(.badges) {
   padding: var(--esp-3) 0 0 var(--esp-4);
   border-top: 1px solid var(--cor-borda);
   font-size: var(--fs-pequeno);
@@ -953,6 +961,10 @@ address {
 /* =====================================================================
    11. FORMULÁRIO DE CADASTRO
    ===================================================================== */
+.formulario-alerta {
+  max-width: 800px;
+}
+
 .formulario {
   display: grid;
   gap: var(--esp-4);
@@ -1020,8 +1032,8 @@ address {
   font-weight: var(--peso-medio);
 }
 
-/* Asterisco de campo obrigatório */
-main span[aria-hidden="true"] {
+/* Asterisco de campo obrigatório (spans sem classe; ícones têm a sua) */
+main span[aria-hidden="true"]:not([class]) {
   color: var(--cor-erro);
   font-weight: var(--peso-negrito);
 }
@@ -1239,9 +1251,365 @@ input[type="radio"] {
   margin: 0;
 }
 
+.rodape p + p {
+  margin-top: var(--esp-2);
+}
+
+.rodape a {
+  color: var(--cor-superficie);
+}
+
+.rodape a:hover {
+  color: var(--cor-destaque);
+}
+
 
 /* =====================================================================
-   13. TELAS PANORÂMICAS (1440px)
+   13. COMPONENTES DE FEEDBACK
+   Padrão de uso (pronto para o back-end gerar o HTML):
+     badge:  <span class="badge badge--sucesso">Vagas abertas</span>
+     alerta: <div class="alerta alerta--erro" role="alert">...</div>
+     toast:  mostrarToast("Mensagem", "sucesso")  (js/feedback.js)
+     modal:  <dialog class="modal">...</dialog> + dialog.showModal()
+   Variações de cor: sucesso, aviso, erro e info/neutro. Cada variação só
+   redefine duas variáveis locais (--feedback-cor e --feedback-fundo), e
+   a estrutura do componente é sempre a mesma.
+   ===================================================================== */
+
+/* ---------- Variações de cor compartilhadas ---------- */
+.badge,
+.alerta,
+.toast {
+  --feedback-cor: var(--cor-primaria-escura);
+  --feedback-fundo: var(--cor-primaria-clara);
+}
+
+.badge--sucesso,
+.alerta--sucesso,
+.toast--sucesso {
+  --feedback-cor: var(--cor-sucesso);
+  --feedback-fundo: var(--cor-sucesso-fundo);
+}
+
+.badge--aviso,
+.alerta--aviso,
+.toast--aviso {
+  --feedback-cor: var(--cor-secundaria-escura);
+  --feedback-fundo: var(--cor-aviso-fundo);
+}
+
+.badge--erro,
+.alerta--erro,
+.toast--erro {
+  --feedback-cor: var(--cor-erro);
+  --feedback-fundo: var(--cor-erro-fundo);
+}
+
+.badge--neutro,
+.alerta--info,
+.toast--info {
+  --feedback-cor: var(--cor-secundaria);
+  --feedback-fundo: var(--cor-superficie);
+}
+
+/* ---------- Badges: etiquetas de categoria e situação ---------- */
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-2);
+  /* só margem vertical: a horizontal fica com o componente onde a lista entra */
+  margin-block: 0 var(--esp-3);
+  padding: 0;
+  list-style: none;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-1);
+  padding: var(--esp-1) var(--esp-2);
+  border: 1px solid var(--feedback-cor);
+  border-radius: var(--raio-pilula);
+  background: var(--feedback-fundo);
+  color: var(--feedback-cor);
+  font-size: var(--fs-pequeno);
+  font-weight: var(--peso-medio);
+  line-height: var(--altura-linha-titulo);
+  white-space: nowrap;
+}
+
+/* Bolinha antes do texto: reforça a categoria além da cor */
+.badge::before {
+  content: "";
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* ---------- Alertas: mensagens fixas dentro da página ---------- */
+.alerta {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--esp-3);
+  margin: 0 0 var(--esp-4);
+  padding: var(--esp-3) var(--esp-4);
+  border: 1px solid var(--cor-borda);
+  border-left: var(--esp-1) solid var(--feedback-cor);
+  border-radius: var(--raio-md);
+  background: var(--feedback-fundo);
+  color: var(--cor-texto);
+}
+
+.alerta__icone,
+.toast__icone {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: var(--feedback-cor);
+  color: var(--cor-superficie);
+  font-size: var(--fs-pequeno);
+  font-weight: var(--peso-negrito);
+  line-height: 1;
+}
+
+.alerta__titulo {
+  margin: 0 0 var(--esp-1);
+  font-weight: var(--peso-negrito);
+  color: var(--feedback-cor);
+}
+
+.alerta p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- Toast: notificação temporária, sem bloquear a página ---------- */
+.toast-area {
+  position: fixed;
+  right: var(--esp-3);
+  bottom: var(--esp-3);
+  left: var(--esp-3);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--esp-2);
+  pointer-events: none;   /* a área vazia não bloqueia cliques na página */
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  padding: var(--esp-3);
+  border-left: var(--esp-1) solid var(--feedback-cor);
+  border-radius: var(--raio-md);
+  background: var(--cor-texto);
+  color: var(--cor-superficie);
+  box-shadow: var(--sombra-3);
+  pointer-events: auto;
+  /* Estado inicial da animação: abaixo e transparente */
+  opacity: 0;
+  transform: translateY(var(--esp-3));
+  transition: opacity var(--transicao), transform var(--transicao);
+}
+
+.toast--visivel {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toast__mensagem {
+  flex: 1;
+  margin: 0;
+}
+
+/* No fundo escuro do toast, as cores de feedback ficam claras para manter
+   contraste; o ícone recebe texto escuro */
+.toast--sucesso {
+  --feedback-cor: var(--cor-sucesso-clara);
+}
+
+.toast--aviso,
+.toast--info {
+  --feedback-cor: var(--cor-destaque);
+}
+
+.toast--erro {
+  --feedback-cor: var(--cor-erro-clara);
+}
+
+.toast .toast__icone {
+  color: var(--cor-texto);
+}
+
+.toast__fechar {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: var(--alvo-toque);
+  height: var(--alvo-toque);
+  margin: calc(var(--esp-2) * -1);
+  border: 0;
+  border-radius: var(--raio-md);
+  background: transparent;
+  color: var(--cor-superficie);
+  font: inherit;
+  font-size: var(--fs-2);
+  cursor: pointer;
+  transition: background-color var(--transicao);
+}
+
+.toast__fechar:hover {
+  background: var(--cor-sobreposicao-clara);
+}
+
+/* ---------- Modal: <dialog> nativo (foco preso e Esc já inclusos) ---------- */
+.modal {
+  width: min(32rem, calc(100% - var(--esp-5)));
+  padding: var(--esp-5) var(--esp-4);
+  border: 0;
+  border-top: var(--esp-1) solid var(--cor-sucesso);
+  border-radius: var(--raio-lg);
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+  box-shadow: var(--sombra-3);
+  text-align: center;
+}
+
+.modal[open] {
+  animation: modal-entrada var(--transicao);
+}
+
+.modal::backdrop {
+  background: var(--cor-sobreposicao-escura);
+}
+
+.modal__icone {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--esp-7);
+  height: var(--esp-7);
+  margin-bottom: var(--esp-3);
+  border-radius: 50%;
+  background: var(--cor-sucesso-fundo);
+  color: var(--cor-sucesso);
+  font-size: var(--fs-4);
+  font-weight: var(--peso-negrito);
+}
+
+.modal h2 {
+  font-size: var(--fs-3);
+}
+
+.modal p {
+  margin-inline: auto;
+}
+
+.modal .acoes {
+  justify-content: center;
+  margin-top: var(--esp-4);
+}
+
+@keyframes modal-entrada {
+  from {
+    opacity: 0;
+    transform: translateY(var(--esp-3)) scale(0.98);
+  }
+}
+
+/* A partir do tablet, o toast fica no canto inferior direito */
+@media (min-width: 768px) {
+  .toast-area {
+    left: auto;
+    width: 24rem;
+  }
+}
+
+/* ---------- Guia de componentes (componentes.html) ---------- */
+.vitrine {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-3);
+  margin-bottom: var(--esp-4);
+  padding: var(--esp-4);
+  border: 1px dashed var(--cor-borda-forte);
+  border-radius: var(--raio-lg);
+  background: var(--cor-superficie);
+}
+
+.vitrine--coluna {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.vitrine .alerta {
+  margin: 0;
+}
+
+/* Exemplos de código para quem for reutilizar os componentes */
+code {
+  padding: 0 var(--esp-1);
+  border-radius: var(--raio-sm);
+  background: var(--cor-primaria-clara);
+  font-size: 0.9em;
+}
+
+.codigo {
+  margin: 0 0 var(--esp-4);
+  padding: var(--esp-3) var(--esp-4);
+  overflow-x: auto;
+  border-radius: var(--raio-md);
+  background: var(--cor-texto);
+  color: var(--cor-superficie);
+  font-size: var(--fs-pequeno);
+  line-height: var(--altura-linha-texto);
+}
+
+.acoes + .codigo {
+  margin-top: var(--esp-4);
+}
+
+.codigo code {
+  padding: 0;
+  background: none;
+  font-size: inherit;
+}
+
+/* Toast parado dentro do guia, só para demonstração visual */
+.vitrine .toast {
+  opacity: 1;
+  transform: none;
+}
+
+/* Estados de botão fixados só para demonstração no guia */
+.botao.demo-hover {
+  background: var(--cor-primaria-escura);
+  box-shadow: var(--sombra-2);
+  transform: translateY(-2px);
+}
+
+.botao.demo-foco {
+  outline: 3px solid var(--cor-texto);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--cor-destaque), var(--sombra-2);
+}
+
+.botao.demo-ativo {
+  box-shadow: none;
+  transform: translateY(1px);
+}
+
+
+/* =====================================================================
+   14. TELAS PANORÂMICAS (1440px)
    ===================================================================== */
 
 /* O container cresce e a fonte base sobe para 17px. Como toda a escala
