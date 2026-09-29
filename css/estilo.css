@@ -9,17 +9,27 @@
     4. Acessibilidade
     5. Botões
     6. Cabeçalho e menu de navegação
-    7. Layout do conteúdo
-    8. Cards e grades
+    7. Layout do conteúdo e sistema de grade de 12 colunas
+    8. Cards
     9. Página inicial
    10. Página de projetos
    11. Formulário de cadastro
    12. Rodapé
+   13. Telas panorâmicas
 
-   Abordagem mobile-first. Pontos de quebra (media queries não aceitam
-   variáveis CSS, por isso ficam documentados aqui):
-     - 600px: tablet (grades de 2 colunas, títulos maiores)
-     - 900px: desktop (menu horizontal, "Quem Somos" em 2 colunas)
+   Abordagem mobile-first: o estilo base atende celulares pequenos e cada
+   @media (min-width) acrescenta comportamento para telas maiores.
+   Pontos de quebra (media queries não aceitam variáveis CSS, por isso
+   ficam documentados aqui):
+     - 480px  celular grande / paisagem: indicadores em 3 colunas,
+              campos do formulário em 2 colunas
+     - 768px  tablet: títulos maiores, cards em 2 colunas,
+              opções do formulário em 3 colunas
+     - 1024px notebook: menu horizontal, cards em 3 colunas,
+              "Quem Somos" em 7 + 5 colunas, formulário em 3 colunas
+     - 1280px desktop: destaque da home em 7 + 5 colunas
+              (texto à esquerda, indicadores empilhados à direita)
+     - 1440px panorâmico: container mais largo e fonte base de 17px
    ===================================================================== */
 
 
@@ -103,6 +113,8 @@
 
   /* ---------- Layout ---------- */
   --largura-max: 1120px;
+  --grade-colunas: 12;
+  --grade-espaco: var(--esp-4);
   --alvo-toque: 48px;   /* área mínima de toque recomendada para botões e links */
 }
 
@@ -120,9 +132,15 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Macroestrutura da página: três áreas nomeadas empilhadas.
+   A linha do conteúdo (1fr) cresce e mantém o rodapé no fim da tela. */
 body {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-areas:
+    "cabecalho"
+    "conteudo"
+    "rodape";
+  grid-template-rows: auto 1fr auto;
   min-height: 100vh;
   margin: 0;
   font-family: var(--fonte-base);
@@ -195,7 +213,7 @@ figcaption {
   color: var(--cor-texto-suave);
 }
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   h1 {
     font-size: var(--fs-5);
   }
@@ -312,7 +330,9 @@ figcaption {
 /* =====================================================================
    6. CABEÇALHO E MENU DE NAVEGAÇÃO
    ===================================================================== */
+/* Dentro do cabeçalho o alinhamento é em uma dimensão, então Flexbox */
 .cabecalho {
+  grid-area: cabecalho;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -443,7 +463,7 @@ figcaption {
   box-shadow: inset 4px 0 0 var(--cor-destaque);
 }
 
-@media (min-width: 900px) {
+@media (min-width: 1024px) {
   .menu-recolhivel .menu-botao {
     display: none;
   }
@@ -465,10 +485,10 @@ figcaption {
 
 
 /* =====================================================================
-   7. LAYOUT DO CONTEÚDO
+   7. LAYOUT DO CONTEÚDO E SISTEMA DE GRADE DE 12 COLUNAS
    ===================================================================== */
 main {
-  flex: 1;
+  grid-area: conteudo;
   width: 100%;
   max-width: var(--largura-max);
   margin-inline: auto;
@@ -510,19 +530,43 @@ address {
   font-style: normal;
 }
 
-
-/* =====================================================================
-   8. CARDS E GRADES
-   ===================================================================== */
-
-/* Grade fluida: quantas colunas couberem com no mínimo 280px cada,
-   sem precisar de media query */
-.grade-cards {
+/* Grade de 12 colunas usada em todas as páginas.
+   minmax(0, 1fr) impede que um conteúdo largo (ex.: e-mail) estique a coluna.
+   No celular todo filho ocupa as 12 colunas; cada componente declara
+   abaixo quantas colunas ocupa em cada ponto de quebra. */
+.grade {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
-  gap: var(--esp-4);
+  grid-template-columns: repeat(var(--grade-colunas), minmax(0, 1fr));
+  gap: var(--grade-espaco);
 }
 
+.grade > * {
+  grid-column: span var(--grade-colunas);
+}
+
+/* Cards: 12 colunas (1 por linha) → 6 (2 por linha) → 4 (3 por linha) */
+@media (min-width: 768px) {
+  .grade-cards > * {
+    grid-column: span 6;
+  }
+
+  /* Em grupos de 3, o card que sobra sozinho fica centralizado (colunas 4 a 9) */
+  .grade-cards--tres > :last-child:nth-child(odd) {
+    grid-column: 4 / span 6;
+  }
+}
+
+@media (min-width: 1024px) {
+  .grade-cards--tres > *,
+  .grade-cards--tres > :last-child:nth-child(odd) {
+    grid-column: span 4;
+  }
+}
+
+
+/* =====================================================================
+   8. CARDS
+   ===================================================================== */
 .card {
   display: flex;
   flex-direction: column;
@@ -594,8 +638,6 @@ address {
    9. PÁGINA INICIAL
    ===================================================================== */
 .destaque {
-  display: grid;
-  gap: var(--esp-4);
   padding: var(--esp-5) var(--esp-4);
   border-radius: var(--raio-lg);
   background: var(--cor-primaria-clara);
@@ -612,9 +654,7 @@ address {
 }
 
 .indicadores {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
-  gap: var(--esp-3);
+  --grade-espaco: var(--esp-3);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -636,24 +676,61 @@ address {
   color: var(--cor-primaria);
 }
 
-@media (min-width: 900px) {
+/* "Quem Somos": no celular, título, texto e foto empilhados sem espaço extra */
+.sobre {
+  row-gap: 0;
+  align-items: start;
+}
+
+/* 480px: os três indicadores lado a lado (4 + 4 + 4 colunas) */
+@media (min-width: 480px) {
+  .indicadores > li {
+    grid-column: span 4;
+  }
+}
+
+/* 1024px: "Quem Somos" com texto em 7 colunas e foto em 5 */
+@media (min-width: 1024px) {
   .destaque {
-    padding: var(--esp-6) var(--esp-6);
+    padding: var(--esp-6);
   }
 
-  /* "Quem Somos": texto à esquerda, foto à direita */
   .sobre {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    --grade-espaco: var(--esp-6);
     grid-template-rows: auto 1fr;
-    column-gap: var(--esp-6);
-    align-items: start;
+  }
+
+  .sobre > h2,
+  .sobre > p {
+    grid-column: 1 / span 7;
   }
 
   .sobre > figure {
-    grid-column: 2;
+    grid-column: 8 / span 5;
     grid-row: 1 / 3;
     margin: 0;
+  }
+}
+
+/* 1280px: destaque dividido em texto (colunas 1 a 7) e indicadores
+   empilhados (colunas 9 a 12), aproveitando a largura da tela */
+@media (min-width: 1280px) {
+  .destaque {
+    grid-template-rows: auto auto 1fr;
+    align-items: start;
+  }
+
+  .destaque > * {
+    grid-column: 1 / span 7;
+  }
+
+  .destaque > .indicadores {
+    grid-column: 9 / span 4;
+    grid-row: 1 / 4;
+  }
+
+  .indicadores > li {
+    grid-column: span 12;
   }
 }
 
@@ -717,7 +794,7 @@ address {
   margin-bottom: var(--esp-4);
 }
 
-@media (min-width: 900px) {
+@media (min-width: 768px) {
   .chamada {
     padding: var(--esp-6);
   }
@@ -778,10 +855,10 @@ address {
   margin-bottom: var(--esp-2);
 }
 
-/* Campos em 1 coluna no celular e 2 colunas a partir do tablet */
+/* Campos na grade de 12 colunas: 12 (1 por linha) → 6 (2 por linha)
+   → 4 (3 por linha), e campos longos ocupam 8 colunas no notebook */
 .grade-campos {
-  display: grid;
-  gap: var(--esp-3) var(--esp-4);
+  row-gap: var(--esp-3);
 }
 
 .campo {
@@ -862,8 +939,7 @@ input[type="radio"] {
 
 /* Checkbox e radio como "cartões" clicáveis: área de toque maior */
 .opcoes {
-  display: grid;
-  gap: var(--esp-2);
+  --grade-espaco: var(--esp-2);
 }
 
 .opcoes label {
@@ -917,17 +993,25 @@ input[type="radio"] {
   font-weight: var(--peso-negrito);
 }
 
-@media (min-width: 600px) {
-  .grade-campos {
-    grid-template-columns: repeat(2, 1fr);
+@media (min-width: 480px) {
+  .grade-campos > * {
+    grid-column: span 6;
+  }
+}
+
+@media (min-width: 768px) {
+  .opcoes > * {
+    grid-column: span 4;
+  }
+}
+
+@media (min-width: 1024px) {
+  .grade-campos > * {
+    grid-column: span 4;
   }
 
-  .campo--largo {
-    grid-column: 1 / -1;
-  }
-
-  .opcoes {
-    grid-template-columns: repeat(3, 1fr);
+  .grade-campos > .campo--largo {
+    grid-column: span 8;
   }
 }
 
@@ -936,6 +1020,7 @@ input[type="radio"] {
    12. RODAPÉ
    ===================================================================== */
 .rodape {
+  grid-area: rodape;
   padding: var(--esp-5) max(var(--esp-3), calc((100% - var(--largura-max)) / 2));
   background: var(--cor-primaria-escura);
   color: var(--cor-superficie);
@@ -946,4 +1031,22 @@ input[type="radio"] {
 .rodape p {
   max-width: none;
   margin: 0;
+}
+
+
+/* =====================================================================
+   13. TELAS PANORÂMICAS (1440px)
+   ===================================================================== */
+
+/* O container cresce e a fonte base sobe para 17px. Como toda a escala
+   tipográfica e de espaçamentos está em rem, tudo acompanha na mesma
+   proporção, mantendo o ritmo visual em monitores grandes. */
+@media (min-width: 1440px) {
+  :root {
+    --largura-max: 1320px;
+  }
+
+  html {
+    font-size: 106.25%;
+  }
 }
