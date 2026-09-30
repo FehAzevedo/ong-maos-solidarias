@@ -1,0 +1,35 @@
+# Integração contínua: todo pull request para develop ou main (e todo push na
+# develop) instala as dependências, roda os testes e gera o build. Um PR que
+# quebre algum desses passos aparece com falha antes do merge.
+name: CI
+
+on:
+  pull_request:
+    branches: [develop, main]
+  push:
+    branches: [develop]
+
+permissions:
+  contents: read
+
+jobs:
+  testes-e-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@v4
+
+      - name: Configurar o Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Testes (validação, armazenamento e contraste dos temas)
+        run: npm test
+
+      - name: Build de produção
+        run: npm run build
