@@ -1,12 +1,17 @@
-// Módulo do formulário de cadastro: máscaras de entrada e validações complementares.
-// As validações nativas (required, pattern, type, minlength) continuam ativas;
-// este módulo formata os campos e cobre regras que o HTML sozinho não verifica.
+// Módulo do formulário de cadastro: máscaras de entrada, verificação dos dados e
+// notificação visual. As regras ficam em validacao.js; aqui elas são aplicadas
+// aos campos e o resultado vira classes CSS e mensagens injetadas no HTML.
+//
+// Quando validar ("recompensar cedo, cobrar tarde"):
+//   - ao sair de um campo (focusout), ele é verificado pela primeira vez;
+//   - a partir daí, é verificado a cada tecla (input), para o erro sumir
+//     assim que for corrigido;
+//   - checkbox, radio e select são verificados ao mudar (change);
+//   - no envio (submit), todos são verificados e o foco vai ao primeiro erro.
+// Sem JavaScript, a validação nativa do HTML (required, pattern) continua valendo.
 
 import { mostrarToast, abrirModal } from './feedback.js';
-
-function somenteDigitos(valor) {
-  return valor.replace(/\D/g, '');
-}
+import { regras, somenteDigitos } from './validacao.js';
 
 // 000.000.000-00
 function mascaraCPF(valor) {
@@ -33,25 +38,87 @@ function mascaraCEP(valor) {
     .replace(/(\d{5})(\d)/, '$1-$2');
 }
 
-// Confere os dígitos verificadores do CPF
-function cpfValido(valor) {
-  const cpf = somenteDigitos(valor);
-  if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
-
-  for (let t = 9; t < 11; t++) {
-    let soma = 0;
-    for (let i = 0; i < t; i++) {
-      soma += Number(cpf[i]) * (t + 1 - i);
-    }
-    const digito = ((soma * 10) % 11) % 10;
-    if (digito !== Number(cpf[t])) return false;
-  }
-  return true;
-}
-
 function aplicarMascara(campo, mascara) {
   campo.addEventListener('input', function () {
     campo.value = mascara(campo.value);
+  });
+}
+
+// ---------- Ligação entre regras e DOM ----------
+
+// Controles (inputs) e contêiner visual de cada campo com regra
+function partesDoCampo(form, nome) {
+  const controles = Array.from(form.elements[nome] instanceof RadioNodeList
+    ? form.elements[nome]
+    : [form.elements[nome]]);
+  const primeiro = controles[0];
+  const container = primeiro.closest('.campo, .grupo-opcoes, .campo-termos');
+  return { controles, container };
+}
+
+// Valor que a regra recebe: texto do campo, ou quantidade marcada nos grupos
+function valorDoCampo(controles) {
+  const tipo = controles[0].type;
+  if (tipo === 'checkbox' || tipo === 'radio') {
+    return controles.filter(function (c) { return c.checked; }).length;
+  }
+  return controles[0].value;
+}
+
+// Liga ou desliga uma mensagem na lista de aria-describedby do controle,
+// preservando descrições que já existiam (ex.: "Idade mínima de 16 anos.")
+function alternarDescricao(controle, id, ligar) {
+  const ids = (controle.getAttribute('aria-describedby') || '').split(' ').filter(Boolean);
+  const semEste = ids.filter(function (atual) { return atual !== id; });
+  const novos = ligar ? semEste.concat(id) : semEste;
+  if (novos.length) controle.setAttribute('aria-describedby', novos.join(' '));
+  else controle.removeAttribute('aria-describedby');
+}
+
+// Aplica o resultado na tela: classes de estado, aria-invalid e mensagem injetada
+function exibirResultado(nome, controles, container, mensagem) {
+  const idMensagem = 'erro-' + nome;
+  let aviso = document.getElementById(idMensagem);
+
+  container.classList.toggle('campo--erro', Boolean(mensagem));
+  container.classList.toggle('campo--sucesso', !mensagem);
+
+  if (mensagem) {
+    if (!aviso) {
+      aviso = document.createElement('p');
+      aviso.id = idMensagem;
+      aviso.className = 'campo__mensagem';
+      container.append(aviso);
+    }
+    aviso.textContent = mensagem;
+  } else if (aviso) {
+    aviso.remove();
+  }
+
+  controles.forEach(function (controle) {
+    controle.setAttribute('aria-invalid', String(Boolean(mensagem)));
+    alternarDescricao(controle, idMensagem, Boolean(mensagem));
+  });
+}
+
+function validarCampo(form, nome) {
+  const { controles, container } = partesDoCampo(form, nome);
+  const mensagem = regras[nome](valorDoCampo(controles));
+  exibirResultado(nome, controles, container, mensagem);
+  return mensagem ? controles[0] : null;
+}
+
+function limparValidacao(form) {
+  form.querySelectorAll('.campo--erro, .campo--sucesso').forEach(function (container) {
+    container.classList.remove('campo--erro', 'campo--sucesso');
+  });
+  form.querySelectorAll('.campo__mensagem').forEach(function (aviso) { aviso.remove(); });
+  form.querySelectorAll('[aria-invalid]').forEach(function (controle) {
+    controle.removeAttribute('aria-invalid');
+    const ids = (controle.getAttribute('aria-describedby') || '').split(' ')
+      .filter(function (id) { return id && !id.startsWith('erro-'); });
+    if (ids.length) controle.setAttribute('aria-describedby', ids.join(' '));
+    else controle.removeAttribute('aria-describedby');
   });
 }
 
@@ -60,49 +127,70 @@ export function iniciarFormulario(raiz) {
   const form = raiz.querySelector('#form-cadastro');
   if (!form) return;
 
-  const cpf = document.getElementById('cpf');
-  const telefone = document.getElementById('telefone');
-  const cep = document.getElementById('cep');
-  const nascimento = document.getElementById('nascimento');
-  const projetos = form.querySelectorAll('input[name="projetos"]');
+  // Com JavaScript ativo, as mensagens próprias substituem os balões do navegador
+  form.noValidate = true;
+
   const status = document.getElementById('mensagem-status');
+  const nascimento = document.getElementById('nascimento');
+  const camposVerificados = new Set();
 
-  aplicarMascara(cpf, mascaraCPF);
-  aplicarMascara(telefone, mascaraTelefone);
-  aplicarMascara(cep, mascaraCEP);
+  aplicarMascara(document.getElementById('cpf'), mascaraCPF);
+  aplicarMascara(document.getElementById('telefone'), mascaraTelefone);
+  aplicarMascara(document.getElementById('cep'), mascaraCEP);
 
-  // CPF: além do formato (pattern), exige dígitos verificadores corretos
-  cpf.addEventListener('input', function () {
-    const completo = cpf.value.length === 14;
-    cpf.setCustomValidity(completo && !cpfValido(cpf.value) ? 'CPF inválido. Confira os números digitados.' : '');
-  });
-
-  // Data de nascimento: idade mínima de 16 anos calculada a partir de hoje
+  // Limite do calendário: hoje menos 16 anos
   const hoje = new Date();
   const mes = String(hoje.getMonth() + 1).padStart(2, '0');
   const dia = String(hoje.getDate()).padStart(2, '0');
   nascimento.max = (hoje.getFullYear() - 16) + '-' + mes + '-' + dia;
 
-  // Projetos: pelo menos uma opção marcada
-  function validarProjetos() {
-    const algumMarcado = Array.from(projetos).some(function (p) { return p.checked; });
-    projetos[0].setCustomValidity(algumMarcado ? '' : 'Selecione pelo menos um projeto.');
+  function verificar(nome) {
+    if (!(nome in regras)) return;
+    camposVerificados.add(nome);
+    validarCampo(form, nome);
   }
-  // Os checkboxes são gerados pelo template: em vez de um ouvinte por opção,
-  // um único ouvinte no formulário recebe o "change" que sobe (bubbling) de qualquer uma
-  form.addEventListener('change', function (evento) {
-    if (evento.target.name === 'projetos') validarProjetos();
-  });
-  validarProjetos();
 
-  // O evento submit só dispara quando todas as validações nativas passam.
-  // Simula o envio: o botão fica desabilitado (estado :disabled no CSS)
-  // enquanto "envia", evitando cadastros duplicados por cliques repetidos.
+  // Delegação: os três ouvintes abaixo atendem todos os campos do formulário,
+  // inclusive os checkboxes gerados por template
+
+  // Primeira verificação ao sair do campo (grupos são tratados no "change")
+  form.addEventListener('focusout', function (evento) {
+    const alvo = evento.target;
+    if (alvo.type !== 'checkbox' && alvo.type !== 'radio') verificar(alvo.name);
+  });
+
+  // Depois da primeira verificação, acompanha a digitação em tempo real
+  form.addEventListener('input', function (evento) {
+    if (camposVerificados.has(evento.target.name)) verificar(evento.target.name);
+  });
+
+  form.addEventListener('change', function (evento) {
+    verificar(evento.target.name);
+  });
+
+  // Envio: verifica tudo; com erro, foca o primeiro e resume num toast
   const botaoEnviar = form.querySelector('button[type="submit"]');
   const textoBotao = botaoEnviar.textContent;
 
   form.addEventListener('submit', function (evento) {
     evento.preventDefault();
+
+    const comErro = Object.keys(regras)
+      .map(function (nome) {
+        camposVerificados.add(nome);
+        return validarCampo(form, nome);
+      })
+      .filter(Boolean);
+
+    if (comErro.length) {
+      comErro[0].focus();
+      mostrarToast(comErro.length === 1
+        ? '1 campo precisa de atenção. Confira o item destacado.'
+        : comErro.length + ' campos precisam de atenção. Confira os itens destacados.', 'erro');
+      return;
+    }
+
+    // Tudo certo: simula o envio com o botão desabilitado (evita envio duplicado)
     botaoEnviar.disabled = true;
     botaoEnviar.textContent = 'Enviando...';
     status.textContent = '';
@@ -116,19 +204,9 @@ export function iniciarFormulario(raiz) {
     }, 1500);
   });
 
-  // Tentativa de envio com campos inválidos: o navegador dispara "invalid" em
-  // cada campo com problema; um único toast resume o que fazer.
-  let avisoPendente = false;
-  form.addEventListener('invalid', function () {
-    if (avisoPendente) return;
-    avisoPendente = true;
-    mostrarToast('Alguns campos precisam de atenção. Confira os itens destacados em vermelho.', 'erro');
-    setTimeout(function () { avisoPendente = false; });
-  }, true);
-
   form.addEventListener('reset', function () {
     status.textContent = '';
-    cpf.setCustomValidity('');
-    setTimeout(validarProjetos);
+    camposVerificados.clear();
+    limparValidacao(form);
   });
 }
