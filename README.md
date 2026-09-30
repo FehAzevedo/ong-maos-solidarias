@@ -221,6 +221,7 @@ As versões seguem o formato `MAJOR.MINOR.PATCH`:
 | `v1.0.0` | Experiência Prática I: estrutura HTML semântica, formulário e imagens otimizadas |
 | `v2.0.0` | Experiência Prática II: design system, layout responsivo e componentes com CSS3 |
 | `v3.0.0` | Experiência Prática III: SPA, templates, validação, localStorage e Leaflet |
+| `v4.0.0` | Experiência Prática IV: GitFlow, acessibilidade WCAG 2.1 AA, temas, build otimizado e deploy com CI/CD |
 
 As versões 1 a 3 foram desenvolvidas diretamente na `main` e marcadas com tags depois. O GitFlow completo passou a ser usado a partir da Experiência Prática IV. O histórico de cada versão está no [CHANGELOG](CHANGELOG.md).
 
