@@ -15,7 +15,9 @@
 
 const paginasEmCache = new Map();
 let aoRenderizar = function () {};
+let aoFalhar = function () {};
 let paginaExibida = location.pathname;
+let ultimaNavegacao = 0;   // identifica a navegação mais recente (evita condição de corrida)
 
 // Só intercepta links do próprio site para páginas .html
 function ehRotaInterna(link) {
@@ -78,21 +80,35 @@ function renderizar(pagina, url) {
 
 async function carregar(url, adicionarAoHistorico) {
   const conteudo = document.getElementById('conteudo');
+  const estaNavegacao = ++ultimaNavegacao;
   conteudo.setAttribute('aria-busy', 'true');
   try {
     const pagina = await buscarPagina(url);
+    // Se outro clique aconteceu enquanto esta página baixava, esta resposta
+    // chegou atrasada e é descartada: vale sempre a última escolha da pessoa
+    if (estaNavegacao !== ultimaNavegacao) return;
     if (adicionarAoHistorico) history.pushState({ spa: true }, '', url.href);
     renderizar(pagina, url);
   } catch (erro) {
-    // Se algo falhar (ex.: sem conexão), faz a navegação tradicional
-    location.href = url.href;
+    if (estaNavegacao !== ultimaNavegacao) return;
+    if (erro instanceof TypeError) {
+      // fetch rejeita com TypeError quando não há conexão: a pessoa continua
+      // na página atual (com o que já preencheu) e recebe um aviso
+      aoFalhar(url);
+    } else {
+      // Resposta do servidor com erro (ex.: 404): navegação tradicional
+      location.href = url.href;
+    }
   } finally {
-    conteudo.removeAttribute('aria-busy');
+    if (estaNavegacao === ultimaNavegacao) conteudo.removeAttribute('aria-busy');
   }
 }
 
-export function iniciarRoteador(callback) {
+// aoRenderizar: chamada com o <main> novo a cada troca de página
+// aoFalharConexao: chamada quando a página não pôde ser baixada por falta de rede
+export function iniciarRoteador(callback, aoFalharConexao) {
   aoRenderizar = callback;
+  aoFalhar = aoFalharConexao || aoFalhar;
   history.scrollRestoration = 'manual';
 
   // Delegação de eventos: um único ouvinte no documento cobre todos os links,

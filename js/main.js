@@ -4,7 +4,7 @@
 import { iniciarMenu } from './modules/menu.js';
 import { iniciarRoteador } from './modules/roteador.js';
 import { renderizarTemplates } from './modules/templates.js';
-import { iniciarFeedback } from './modules/feedback.js';
+import { iniciarFeedback, mostrarToast } from './modules/feedback.js';
 import { iniciarFormulario } from './modules/formulario.js';
 import { iniciarHistorico } from './modules/persistencia.js';
 import { iniciarMapa } from './modules/mapa.js';
@@ -23,7 +23,9 @@ function iniciarPagina(raiz) {
 iniciarMenu();
 iniciarFeedback();
 iniciarPagina(document.getElementById('conteudo'));
-iniciarRoteador(iniciarPagina);
+iniciarRoteador(iniciarPagina, function () {
+  mostrarToast('Não foi possível abrir a página. Verifique sua conexão e tente de novo.', 'erro');
+});
 
 // Link direto para um card gerado (ex.: projetos.html#reforco-escolar): o
 // navegador tenta rolar antes de o card existir, então a rolagem é refeita aqui
