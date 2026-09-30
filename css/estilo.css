@@ -1076,7 +1076,7 @@ main span[aria-hidden="true"]:not([class]) {
 }
 
 /* :where() zera a especificidade do filtro de tipos, para que os estados
-   abaixo (:hover, :focus-visible, :user-valid, :user-invalid) prevaleçam */
+   abaixo (:hover, :focus-visible, .campo--sucesso, .campo--erro) prevaleçam */
 input:where(:not([type="checkbox"], [type="radio"])),
 select,
 textarea {
@@ -1114,20 +1114,16 @@ textarea:focus-visible {
   border-color: var(--cor-primaria);
 }
 
-/* Feedback dinâmico de preenchimento.
-   :user-valid e :user-invalid só entram depois que a pessoa sai do campo
-   (ou tenta enviar), então ninguém vê erro antes de começar a digitar.
-   O erro nunca depende só da cor: muda a espessura da borda, o fundo,
-   aparece um ícone e uma mensagem em texto. */
-input:user-valid,
-select:user-valid,
-textarea:user-valid {
+/* Verificação do preenchimento (js/modules/formulario.js).
+   O script aplica .campo--sucesso ou .campo--erro no contêiner do campo
+   (.campo, .grupo-opcoes ou .campo-termos) e injeta um <p class="campo__mensagem">
+   com o motivo do erro. O erro nunca depende só da cor: muda a espessura da
+   borda e o fundo, aparece um ícone e uma mensagem em texto. */
+.campo--sucesso :is(input, select, textarea) {
   border-color: var(--cor-sucesso);
 }
 
-input:user-invalid,
-select:user-invalid,
-textarea:user-invalid {
+.campo--erro :is(input, select, textarea) {
   border: 2px solid var(--cor-erro);
   background-color: var(--cor-erro-fundo);
 }
@@ -1140,24 +1136,43 @@ textarea:user-invalid {
   background-size: 1.25rem;
 }
 
-.campo input:is([type="text"], [type="email"], [type="tel"]):user-valid {
+.campo--sucesso input:is([type="text"], [type="email"], [type="tel"]) {
   background-image: var(--icone-sucesso);
 }
 
-.campo input:is([type="text"], [type="email"], [type="tel"]):user-invalid {
+.campo--erro input:is([type="text"], [type="email"], [type="tel"]) {
   background-image: var(--icone-erro);
 }
 
-/* Rótulo e mensagem de erro do campo (:has olha para o campo lá dentro) */
-.campo:has(:user-invalid) label {
+/* Rótulo do campo com erro */
+.campo--erro > label,
+.campo-termos.campo--erro label,
+.grupo-opcoes.campo--erro legend h3 {
   color: var(--cor-erro);
 }
 
-.campo:has(:user-invalid)::after {
-  content: "Confira o preenchimento deste campo.";
+/* Mensagem injetada pelo script, com o mesmo ícone de erro antes do texto */
+.campo__mensagem {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-1);
+  margin: 0;
   font-size: var(--fs-pequeno);
   font-weight: var(--peso-medio);
   color: var(--cor-erro);
+}
+
+.campo__mensagem::before {
+  content: "";
+  flex-shrink: 0;
+  width: 1em;
+  height: 1em;
+  background: var(--icone-erro) center / contain no-repeat;
+}
+
+.grupo-opcoes .campo__mensagem,
+.campo-termos .campo__mensagem {
+  margin-top: var(--esp-2);
 }
 
 input[type="checkbox"],
@@ -1210,27 +1225,10 @@ input[type="radio"] {
   margin-top: var(--esp-1);
 }
 
-/* Grupo de checkbox/radio sem nenhuma opção marcada após tentar enviar */
-.grupo-opcoes:has(:user-invalid) legend h3 {
-  color: var(--cor-erro);
-}
-
-.grupo-opcoes:has(:user-invalid) .opcoes label {
+/* Grupo de checkbox/radio sem nenhuma opção marcada */
+.grupo-opcoes.campo--erro .opcoes label {
   border: 2px solid var(--cor-erro);
   background: var(--cor-erro-fundo);
-}
-
-.grupo-opcoes:has(:user-invalid)::after {
-  content: "Escolha pelo menos uma opção.";
-  display: block;
-  margin-top: var(--esp-2);
-  font-size: var(--fs-pequeno);
-  font-weight: var(--peso-medio);
-  color: var(--cor-erro);
-}
-
-.campo-termos:has(:user-invalid) label {
-  color: var(--cor-erro);
 }
 
 /* Mensagem de envio: continua no DOM (region "status") mesmo vazia,
