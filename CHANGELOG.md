@@ -6,38 +6,43 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), a
 
 ## [Não lançado]
 
-### perf
-- Imagens responsivas: versões de 400 e 800 px com `srcset` e `sizes`; JPG recomprimidos (qualidade 80, progressivos) e logotipo PNG com paleta (13 → 5 KB)
-- Deslocamento de layout (CLS) de 0,487 para 0: classe `js` aplicada no `<head>` e espaço reservado para os cards gerados por JavaScript
+## [4.0.0] - 2026-09-30
 
-### fix
-- Favicon (antes, erro 404 no console)
+Experiência Prática IV: versionamento, acessibilidade, otimização e deploy.
 
 ### feat
 - Temas escuro e de alto contraste, escolhidos no menu ou automáticos por `prefers-color-scheme` e `prefers-contrast`, com a escolha salva no `localStorage`
 - Ajustes para o modo de alto contraste do Windows (`forced-colors`)
 
+### fix
+- Acessibilidade (auditoria WCAG 2.1 AA): o `<main>` recebe foco pelo link "Pular para o conteúdo"; o grupo "Projetos de interesse" é anunciado como obrigatório; o link para o OpenStreetMap avisa que abre em nova aba; o toast pausa enquanto o mouse ou o foco estão sobre ele; a dica do campo nome acompanha a regra de validação
+- Favicon (antes, erro 404 no console)
+
+### perf
+- Imagens responsivas: versões de 400 e 800 px com `srcset` e `sizes`; JPG recomprimidos (qualidade 80, progressivos) e logotipo PNG com paleta (13 → 5 KB)
+- Deslocamento de layout (CLS) de 0,487 para 0: classe `js` aplicada no `<head>` e espaço reservado para os cards gerados por JavaScript
+
 ### refactor
 - Variáveis de cor separadas por papel (`--cor-enfase`, `--cor-sobre-marca`, `--cor-inverso-fundo`...), para cada tema trocar o fundo sem afetar o texto sobre o vinho
 
-### fix
-- Acessibilidade: o `<main>` recebe foco pelo link "Pular para o conteúdo"; o grupo "Projetos de interesse" é anunciado como obrigatório; o link para o OpenStreetMap avisa que abre em nova aba; o toast pausa enquanto o mouse ou o foco estão sobre ele; a dica do campo nome acompanha a regra de validação
-
 ### build
-- Minificação do HTML com html-minifier-terser e relatório de tamanhos com gzip no build
-- `package.json` com os scripts `start`, `test`, `build` e `preview`
-- Servidor local em Node, sem dependências
-- Build de produção com esbuild: JavaScript em um arquivo minificado, CSS minificado e versão nos links para evitar cache desatualizado
+- `package.json` com os scripts `start`, `test`, `build` e `preview`, e servidor local em Node, sem dependências
+- Build de produção com esbuild (JavaScript em um arquivo minificado e CSS minificado) e html-minifier-terser (HTML), com versão nos links para evitar cache desatualizado e relatório de tamanhos com gzip
+
+### ci
+- GitHub Actions: CI com testes e build em todo pull request; deploy da pasta `dist/` no GitHub Pages a cada push na `main`
 
 ### test
-- Testes automatizados das regras de validação e do acesso ao `localStorage` com `node --test`
-- Teste de contraste WCAG dos pares de cor nos três temas
+- Testes automatizados das regras de validação, do acesso ao `localStorage` e do contraste WCAG dos pares de cor nos três temas (`node --test`)
 
 ### docs
-- README com descrição, estrutura, execução local e fluxo GitFlow (`6f76708`)
-- CHANGELOG e padrão de mensagens de commit (`1858d53`)
-- Modelos de issue e de pull request (`31faf3a`, PR #6)
-- README com pré-requisitos, instalação, scripts, testes e build
+- README completo: instalação, scripts, testes, build, deploy, acessibilidade, imagens, desempenho e fluxo de trabalho
+- CHANGELOG, padrão Conventional Commits e versionamento semântico
+- Modelos de issue e de pull request
+
+### chore
+- Adoção do GitFlow (`develop`, `feature/*`, `release/*`), com issues, milestone e pull requests
+- Mensagens de commit reescritas para remover linhas de coautoria; os hashes das versões anteriores mudaram, e o conteúdo dos arquivos é o mesmo
 
 ## [3.0.0] - 2026-09-29
 
@@ -85,7 +90,8 @@ Experiência Prática I: estrutura HTML.
 ### perf
 - Imagens otimizadas em JPG/PNG e WebP (`9d37d08`)
 
-[Não lançado]: https://github.com/FehAzevedo/ong-maos-solidarias/compare/v3.0.0...develop
+[Não lançado]: https://github.com/FehAzevedo/ong-maos-solidarias/compare/v4.0.0...develop
+[4.0.0]: https://github.com/FehAzevedo/ong-maos-solidarias/compare/v3.0.0...v4.0.0
 [3.0.0]: https://github.com/FehAzevedo/ong-maos-solidarias/compare/v2.0.0...v3.0.0
 [2.0.0]: https://github.com/FehAzevedo/ong-maos-solidarias/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.com/FehAzevedo/ong-maos-solidarias/releases/tag/v1.0.0

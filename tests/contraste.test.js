@@ -9,7 +9,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
-const css = await readFile(new URL('../css/estilo.css', import.meta.url), 'utf8');
+// Quebras de linha normalizadas: no Windows o Git pode gravar o arquivo com CRLF
+const css = (await readFile(new URL('../css/estilo.css', import.meta.url), 'utf8')).replaceAll('\r\n', '\n');
 
 // Lê as declarações "--nome: valor;" de um bloco que começa com "seletor {"
 function lerBloco(seletor) {

@@ -1,6 +1,6 @@
 {
   "name": "ong-maos-solidarias",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "private": true,
   "description": "Plataforma web da ONG Mãos Solidárias: projetos, doações e cadastro de voluntários.",
   "type": "module",
