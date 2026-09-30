@@ -6,6 +6,19 @@ Plataforma web da ONG Mãos Solidárias, que atua desde 2015 na zona leste de S�
 
 Projeto desenvolvido nas Experiências Práticas da disciplina de Desenvolvimento Front-end, em HTML, CSS e JavaScript puros (sem frameworks), com uma única biblioteca externa (Leaflet) para o mapa.
 
+## Sumário
+
+- [Funcionalidades](#funcionalidades)
+- [Tecnologias](#tecnologias)
+- [Pré-requisitos](#pré-requisitos)
+- [Instalação e execução](#instalação-e-execução)
+- [Testes](#testes)
+- [Build de produção](#build-de-produção)
+- [Estrutura do projeto](#estrutura-do-projeto)
+- [Acessibilidade](#acessibilidade)
+- [Fluxo de trabalho e versionamento](#fluxo-de-trabalho-e-versionamento)
+- [Autor](#autor)
+
 ## Funcionalidades
 
 - **Páginas:** início, projetos (com campanhas de doação), cadastro de voluntários e guia de componentes.
@@ -18,9 +31,78 @@ Projeto desenvolvido nas Experiências Práticas da disciplina de Desenvolviment
 - **Persistência:** rascunho do cadastro e histórico de envios no `localStorage` (o CPF não é salvo).
 - **Componentes de feedback:** badges, alertas, toast e modal.
 - **Mapa da sede:** Leaflet carregado sob demanda.
-- **Acessibilidade:** contraste WCAG AA, navegação por teclado, foco visível, link para pular ao conteúdo e respeito a `prefers-reduced-motion`.
 
-## Estrutura
+## Tecnologias
+
+| Área | Tecnologia |
+|---|---|
+| Estrutura | HTML5 semântico, `<template>`, `<dialog>` |
+| Estilo | CSS3: variáveis, Grid, Flexbox, `:has()`, `:where()`, media queries |
+| Comportamento | JavaScript ES6+ em ES Modules, History API, `fetch`, `localStorage` |
+| Biblioteca | [Leaflet 1.9.4](https://leafletjs.com/) com mapas do [OpenStreetMap](https://www.openstreetmap.org/copyright), via CDN |
+| Ferramentas | Node.js, npm, [esbuild](https://esbuild.github.io/) (build) e `node:test` (testes) |
+| Hospedagem | GitHub Pages |
+
+## Pré-requisitos
+
+- [Git](https://git-scm.com/)
+- [Node.js](https://nodejs.org/) 20 ou superior (inclui o npm)
+- Um navegador atual (Chrome, Edge, Firefox ou Safari)
+
+O site em si não depende do Node: HTML, CSS e JavaScript rodam direto no navegador. O Node é usado só para o servidor local, os testes e o build.
+
+## Instalação e execução
+
+```bash
+git clone https://github.com/FehAzevedo/ong-maos-solidarias.git
+cd ong-maos-solidarias
+npm install
+npm start
+```
+
+Acesse http://localhost:5500. Para usar outra porta, defina a variável `PORT` (ex.: `PORT=8080 npm start`).
+
+O `npm install` instala apenas o esbuild, dependência de desenvolvimento usada no build. O site precisa ser servido por HTTP, porque usa ES Modules e `fetch`; abrir o arquivo direto no navegador (`file://`) não carrega o JavaScript. Sem Node, qualquer servidor estático funciona, por exemplo `python -m http.server 5500`.
+
+### Scripts
+
+| Comando | O que faz |
+|---|---|
+| `npm start` | Servidor local do código-fonte em http://localhost:5500 |
+| `npm test` | Executa os testes automatizados |
+| `npm run build` | Gera a versão de produção em `dist/` |
+| `npm run preview` | Servidor local da versão de produção (`dist/`) |
+
+## Testes
+
+```bash
+npm test
+```
+
+Os testes usam o executor nativo do Node (`node --test`), sem dependências, e ficam em `tests/`:
+
+- `validacao.test.js`: regras do cadastro (nome, CPF e dígitos verificadores, idade mínima, e-mail, telefone, CEP, número e grupos obrigatórios).
+- `armazenamento.test.js`: gravação e leitura no `localStorage`, incluindo JSON corrompido e falha de armazenamento.
+
+A interface (SPA, menu, formulário e componentes) é testada manualmente no navegador, em 375 px e no desktop, com teclado e com o console aberto, seguindo o checklist do modelo de pull request.
+
+## Build de produção
+
+```bash
+npm run build
+npm run preview
+```
+
+O build gera a pasta `dist/`, que não vai para o repositório:
+
+- os módulos JavaScript viram um único arquivo minificado (menos requisições);
+- o CSS é minificado;
+- os links de CSS e JS nas páginas recebem `?v=<versão>`, para o navegador baixar os arquivos novos a cada publicação em vez de misturar versões guardadas no cache;
+- imagens e páginas são copiadas.
+
+Resultado na versão 3.0.0: JavaScript de 43,7 KB para 19,2 KB (-56%) e CSS de 42,3 KB para 23,6 KB (-44%).
+
+## Estrutura do projeto
 
 ```
 index.html          ponto de entrada; redireciona para html/index.html
@@ -39,19 +121,27 @@ js/modules/         um módulo por responsabilidade:
   mapa.js             integração com o Leaflet
 js/dados/           dados dos projetos e dos estados
 imagens/            imagens otimizadas em WebP e JPG/PNG
+tests/              testes automatizados (node --test)
+scripts/            servidor local e build de produção
+.github/            modelos de issue e de pull request
+CHANGELOG.md        histórico de versões
 ```
 
-## Como executar localmente
+## Acessibilidade
 
-O site usa ES Modules e `fetch`, então precisa ser servido por HTTP (abrir o arquivo direto no navegador não carrega o JavaScript). Na pasta do projeto:
+O projeto segue as diretrizes da WCAG 2.1 nível AA:
 
-```bash
-python -m http.server 5500
-```
+- contraste mínimo de 4,5:1 no texto e 3:1 em bordas de campos e no foco;
+- navegação completa por teclado, com foco visível em dois tons e link para pular ao conteúdo;
+- na SPA, o foco vai para o título da nova página a cada navegação, para leitores de tela anunciarem a troca;
+- erros do formulário ligados ao campo por `aria-describedby` e `aria-invalid`, sem depender só da cor;
+- áreas de toque de 48 px e respeito a `prefers-reduced-motion`.
 
-Depois, acesse http://localhost:5500.
+A auditoria completa (ferramentas automáticas, teclado e leitor de tela) é acompanhada na [issue #2](https://github.com/FehAzevedo/ong-maos-solidarias/issues/2).
 
-## Fluxo de trabalho (GitFlow)
+## Fluxo de trabalho e versionamento
+
+### GitFlow
 
 | Branch | Uso |
 |---|---|
@@ -69,16 +159,6 @@ Os merges usam `--no-ff`, para que cada funcionalidade apareça agrupada no hist
 - Toda integração em `develop` ou `main` é feita por **pull request**, descrevendo o motivo, as mudanças e como testar, e citando a issue relacionada.
 - Os modelos ficam em `.github/`: `pull_request_template.md` e, em `ISSUE_TEMPLATE/`, os modelos de erro e de melhoria.
 
-Cada versão lançada recebe uma tag:
-
-| Versão | Entrega |
-|---|---|
-| `v1.0.0` | Experiência Prática I: estrutura HTML semântica, formulário e imagens otimizadas |
-| `v2.0.0` | Experiência Prática II: design system, layout responsivo e componentes com CSS3 |
-| `v3.0.0` | Experiência Prática III: SPA, templates, validação, localStorage e Leaflet |
-
-As versões 1 a 3 foram desenvolvidas diretamente na `main` e marcadas com tags depois. O GitFlow completo passou a ser usado a partir da Experiência Prática IV.
-
 ### Versionamento semântico
 
 As versões seguem o formato `MAJOR.MINOR.PATCH`:
@@ -87,7 +167,13 @@ As versões seguem o formato `MAJOR.MINOR.PATCH`:
 - **MINOR:** nova funcionalidade compatível com a versão atual.
 - **PATCH:** correção de erro sem mudar funcionalidades.
 
-O histórico de cada versão está no [CHANGELOG](CHANGELOG.md).
+| Versão | Entrega |
+|---|---|
+| `v1.0.0` | Experiência Prática I: estrutura HTML semântica, formulário e imagens otimizadas |
+| `v2.0.0` | Experiência Prática II: design system, layout responsivo e componentes com CSS3 |
+| `v3.0.0` | Experiência Prática III: SPA, templates, validação, localStorage e Leaflet |
+
+As versões 1 a 3 foram desenvolvidas diretamente na `main` e marcadas com tags depois. O GitFlow completo passou a ser usado a partir da Experiência Prática IV. O histórico de cada versão está no [CHANGELOG](CHANGELOG.md).
 
 ### Mensagens de commit
 
@@ -98,18 +184,14 @@ A partir da Experiência Prática IV, as mensagens seguem o [Conventional Commit
 | `feat` | nova funcionalidade (gera versão MINOR) |
 | `fix` | correção de erro (gera versão PATCH) |
 | `docs` | documentação |
+| `test` | testes automatizados |
+| `build` | build e dependências |
 | `style` | formatação, sem mudar comportamento |
 | `refactor` | reorganização de código, sem mudar comportamento |
 | `perf` | melhoria de desempenho |
 | `chore` | tarefas de manutenção (configuração, publicação) |
 
 Uma mudança incompatível leva `!` depois do tipo (ex.: `feat!:`) ou um rodapé `BREAKING CHANGE:`, e gera versão MAJOR.
-
-## Tecnologias
-
-- HTML5 semântico, CSS3 (variáveis, Grid, Flexbox, `:has()`, `:where()`) e JavaScript ES6+ (ES Modules)
-- [Leaflet 1.9.4](https://leafletjs.com/) com mapas do [OpenStreetMap](https://www.openstreetmap.org/copyright)
-- Hospedagem no GitHub Pages
 
 ## Autor
 
