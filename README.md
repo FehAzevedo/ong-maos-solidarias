@@ -14,6 +14,7 @@ Projeto desenvolvido nas Experiências Práticas da disciplina de Desenvolviment
 - [Instalação e execução](#instalação-e-execução)
 - [Testes](#testes)
 - [Build de produção](#build-de-produção)
+- [Deploy e CI/CD](#deploy-e-cicd)
 - [Estrutura do projeto](#estrutura-do-projeto)
 - [Acessibilidade](#acessibilidade)
 - [Fluxo de trabalho e versionamento](#fluxo-de-trabalho-e-versionamento)
@@ -131,6 +132,19 @@ Antes das correções, Início e Projetos marcavam 79 de desempenho, com CLS de 
 
 Para garantir que a minificação não muda o resultado, as duas versões foram comparadas no navegador: estilos calculados, posição de cada elemento e texto visível são idênticos nas quatro páginas e nos três temas.
 
+## Deploy e CI/CD
+
+O site é publicado no **GitHub Pages** por dois workflows do GitHub Actions, em `.github/workflows/`:
+
+| Workflow | Quando roda | O que faz |
+|---|---|---|
+| `ci.yml` (CI) | Todo pull request para `develop` ou `main` e todo push na `develop` | `npm ci`, `npm test` e `npm run build`; um PR que quebre algum passo aparece com falha antes do merge |
+| `deploy.yml` (CD) | Todo push na `main` (merge de release ou hotfix) e manualmente pela aba Actions | Testa, gera o build e publica a pasta `dist/` no GitHub Pages |
+
+O GitHub Pages está configurado com a origem **GitHub Actions** (Settings → Pages → Build and deployment), então o que vai ao ar é sempre o build minificado, nunca os arquivos-fonte. Se os testes ou o build falharem, nada é publicado e o site continua na versão anterior.
+
+Fluxo de uma entrega: `feature/*` → PR para `develop` (CI) → `release/x.y.z` → PR para `main` (CI) → merge → deploy automático → tag `vx.y.z` e release no GitHub.
+
 ## Estrutura do projeto
 
 ```
@@ -153,7 +167,7 @@ js/dados/           dados dos projetos e dos estados
 imagens/            imagens otimizadas em WebP e JPG/PNG
 tests/              testes automatizados (node --test)
 scripts/            servidor local e build de produção
-.github/            modelos de issue e de pull request
+.github/            workflows de CI/CD e modelos de issue e de pull request
 CHANGELOG.md        histórico de versões
 ```
 
