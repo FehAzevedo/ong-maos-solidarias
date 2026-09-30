@@ -61,7 +61,15 @@ Depois, acesse http://localhost:5500.
 | `release/*` | Preparação de uma versão: ajustes finais antes de mesclar em `main` e `develop`. |
 | `hotfix/*` | Correção urgente criada a partir de `main` e mesclada em `main` e `develop`. |
 
-Os merges usam `--no-ff`, para que cada funcionalidade apareça agrupada no histórico. Cada versão lançada recebe uma tag:
+Os merges usam `--no-ff`, para que cada funcionalidade apareça agrupada no histórico.
+
+### Issues, milestones e pull requests
+
+- Cada tarefa é registrada como uma **issue** e ligada ao **milestone** da versão em que será entregue (ex.: `v4.0.0: Experiência Prática IV`).
+- Toda integração em `develop` ou `main` é feita por **pull request**, descrevendo o motivo, as mudanças e como testar, e citando a issue relacionada.
+- Os modelos ficam em `.github/`: `pull_request_template.md` e, em `ISSUE_TEMPLATE/`, os modelos de erro e de melhoria.
+
+Cada versão lançada recebe uma tag:
 
 | Versão | Entrega |
 |---|---|
