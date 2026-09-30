@@ -5,18 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Cadastre-se como voluntário da ONG Mãos Solidárias.">
   <title>Seja Voluntário | ONG Mãos Solidárias</title>
-  <link rel="stylesheet" href="css/estilo.css">
-  <script src="js/menu.js" defer></script>
-  <script src="js/feedback.js" defer></script>
-  <script src="js/mascaras.js" defer></script>
+  <link rel="stylesheet" href="../css/estilo.css">
+  <script type="module" src="../js/main.js"></script>
 </head>
 <body>
   <a class="pular-link" href="#conteudo">Pular para o conteúdo</a>
 
   <header class="cabecalho">
     <picture>
-      <source srcset="imagens/logo.webp" type="image/webp">
-      <img class="cabecalho__logo" src="imagens/logo.png" alt="Logotipo da ONG Mãos Solidárias: duas mãos estendidas uma em direção à outra, com o nome da ONG entre elas" width="80" height="80">
+      <source srcset="../imagens/logo.webp" type="image/webp">
+      <img class="cabecalho__logo" src="../imagens/logo.png" alt="Logotipo da ONG Mãos Solidárias: duas mãos estendidas uma em direção à outra, com o nome da ONG entre elas" width="80" height="80">
     </picture>
     <p class="marca">ONG Mãos Solidárias</p>
     <button type="button" class="menu-botao" aria-expanded="false" aria-controls="menu-principal">
@@ -215,17 +213,17 @@
 
       <p id="mensagem-status" class="mensagem-status" role="status" aria-live="polite"></p>
     </form>
-  </main>
 
-  <dialog id="modal-cadastro" class="modal" aria-labelledby="modal-cadastro-titulo">
-    <span class="modal__icone" aria-hidden="true">✓</span>
-    <h2 id="modal-cadastro-titulo">Cadastro recebido!</h2>
-    <p>Obrigado por querer fazer parte da Mãos Solidárias. Nossa equipe vai entrar em contato em breve para combinar sua primeira atividade.</p>
-    <form method="dialog" class="acoes">
-      <button type="submit" class="botao">Fechar</button>
-      <a class="botao botao--neutro" href="projetos.html">Conhecer os projetos</a>
-    </form>
-  </dialog>
+    <dialog id="modal-cadastro" class="modal" aria-labelledby="modal-cadastro-titulo">
+      <span class="modal__icone" aria-hidden="true">✓</span>
+      <h2 id="modal-cadastro-titulo">Cadastro recebido!</h2>
+      <p>Obrigado por querer fazer parte da Mãos Solidárias. Nossa equipe vai entrar em contato em breve para combinar sua primeira atividade.</p>
+      <form method="dialog" class="acoes">
+        <button type="submit" class="botao">Fechar</button>
+        <a class="botao botao--neutro" href="projetos.html">Conhecer os projetos</a>
+      </form>
+    </dialog>
+  </main>
 
   <footer class="rodape">
     <p>&copy; 2026 ONG Mãos Solidárias. Todos os direitos reservados.</p>
