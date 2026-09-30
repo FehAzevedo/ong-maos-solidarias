@@ -38,7 +38,7 @@
     </nav>
   </header>
 
-  <main id="conteudo">
+  <main id="conteudo" tabindex="-1">
     <h1>Seja Voluntário</h1>
     <p class="introducao">Preencha o formulário abaixo. Campos marcados com <span aria-hidden="true">*</span> são obrigatórios.</p>
 
@@ -59,7 +59,7 @@
             <label for="nome">Nome completo <span aria-hidden="true">*</span></label>
             <input type="text" id="nome" name="nome" required minlength="3" maxlength="100"
                    pattern="[A-Za-zÀ-ÿ' \-]+" autocomplete="name"
-                   title="Use apenas letras e espaços, com no mínimo 3 caracteres.">
+                   title="Informe nome e sobrenome, usando apenas letras.">
           </div>
 
           <div class="campo">
@@ -149,7 +149,7 @@
         <legend><h2>Participação</h2></legend>
 
         <fieldset id="grupo-projetos" class="grupo-opcoes">
-          <legend><h3>Projetos de interesse <span aria-hidden="true">*</span></h3></legend>
+          <legend><h3>Projetos de interesse <span aria-hidden="true">*</span><span class="visualmente-oculto">(obrigatório, escolha pelo menos um)</span></h3></legend>
           <!-- Opções geradas a partir de js/dados/projetos.js (mesma fonte dos cards) -->
           <div id="opcoes-projetos" class="grade opcoes"></div>
           <template id="modelo-opcao-projeto">
