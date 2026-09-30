@@ -26,9 +26,9 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), a
 - Teste de contraste WCAG dos pares de cor nos três temas
 
 ### docs
-- README com descrição, estrutura, execução local e fluxo GitFlow (`8e8a5f7`)
-- CHANGELOG e padrão de mensagens de commit (`4b435fb`)
-- Modelos de issue e de pull request (`f2a8ca9`, PR #6)
+- README com descrição, estrutura, execução local e fluxo GitFlow (`6f76708`)
+- CHANGELOG e padrão de mensagens de commit (`1858d53`)
+- Modelos de issue e de pull request (`31faf3a`, PR #6)
 - README com pré-requisitos, instalação, scripts, testes e build
 
 ## [3.0.0] - 2026-09-29
@@ -36,46 +36,46 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), a
 Experiência Prática III: lógica em JavaScript.
 
 ### ⚠ BREAKING CHANGES
-- As páginas foram movidas para a pasta `html/`. Endereços antigos como `/projetos.html` passam a ser `/html/projetos.html`; a raiz redireciona para `html/index.html` (`217bf1d`).
+- As páginas foram movidas para a pasta `html/`. Endereços antigos como `/projetos.html` passam a ser `/html/projetos.html`; a raiz redireciona para `html/index.html` (`27baadf`).
 
 ### feat
-- Navegação SPA com History API e JavaScript em ES Modules (`217bf1d`)
-- Cards de projetos e opções do cadastro gerados com `<template>` a partir de dados (`367a1ce`)
-- Verificação do formulário com regras, RegEx e mensagens por campo (`15e8665`)
-- Rascunho e histórico do cadastro no `localStorage`; mapa da sede com Leaflet (`e43db81`)
+- Navegação SPA com History API e JavaScript em ES Modules (`27baadf`)
+- Cards de projetos e opções do cadastro gerados com `<template>` a partir de dados (`e81f85f`)
+- Verificação do formulário com regras, RegEx e mensagens por campo (`302e70f`)
+- Rascunho e histórico do cadastro no `localStorage`; mapa da sede com Leaflet (`1d495e3`)
 
 ### refactor
-- Delegação de eventos para os botões de feedback e os checkboxes gerados (`49691a0`)
+- Delegação de eventos para os botões de feedback e os checkboxes gerados (`65cae4a`)
 
 ### fix
-- Condição de corrida ao clicar rápido em links da SPA e tratamento de perda de conexão (`d288fc8`)
+- Condição de corrida ao clicar rápido em links da SPA e tratamento de perda de conexão (`9064969`)
 
 ## [2.0.0] - 2026-09-29
 
 Experiência Prática II: estilização com CSS3.
 
 ### feat
-- Design system com variáveis CSS e layout responsivo (`912d2d4`)
-- Grade de 12 colunas e cinco pontos de quebra (`158252a`)
-- Submenu dropdown e animação do menu hambúrguer (`7ded75a`)
-- Estados interativos dos botões e feedback de validação (`66e527c`)
-- Componentes de feedback: badges, alertas, toast e modal (`98a3b5d`)
+- Design system com variáveis CSS e layout responsivo (`5c4f7f6`)
+- Grade de 12 colunas e cinco pontos de quebra (`8eb5d10`)
+- Submenu dropdown e animação do menu hambúrguer (`049f61f`)
+- Estados interativos dos botões e feedback de validação (`85e6313`)
+- Componentes de feedback: badges, alertas, toast e modal (`c649f81`)
 
 ### chore
-- Republicação do GitHub Pages (`b965bbc`)
+- Republicação do GitHub Pages (`2dff6a8`)
 
 ## [1.0.0] - 2026-09-28
 
 Experiência Prática I: estrutura HTML.
 
 ### feat
-- Estrutura inicial do site: páginas semânticas e formulário de cadastro (`53a1f07`)
+- Estrutura inicial do site: páginas semânticas e formulário de cadastro (`b400e9f`)
 
 ### fix
-- Autocomplete do telefone apontado pelo W3C Validator (`da50033`)
+- Autocomplete do telefone apontado pelo W3C Validator (`abeaa3d`)
 
 ### perf
-- Imagens otimizadas em JPG/PNG e WebP (`53d1e01`)
+- Imagens otimizadas em JPG/PNG e WebP (`9d37d08`)
 
 [Não lançado]: https://github.com/FehAzevedo/ong-maos-solidarias/compare/v3.0.0...develop
 [3.0.0]: https://github.com/FehAzevedo/ong-maos-solidarias/compare/v2.0.0...v3.0.0
