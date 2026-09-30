@@ -57,7 +57,18 @@ export function mostrarToast(mensagem, tipo) {
   }
 
   fechar.addEventListener('click', remover);
-  setTimeout(remover, DURACAO_TOAST);
+
+  // A contagem para sumir pausa enquanto o mouse ou o foco estão no toast,
+  // para dar tempo de ler (WCAG 2.2.1: tempo ajustável)
+  let temporizador = setTimeout(remover, DURACAO_TOAST);
+  function pausar() { clearTimeout(temporizador); }
+  function retomar() { temporizador = setTimeout(remover, DURACAO_TOAST); }
+  toast.addEventListener('mouseenter', pausar);
+  toast.addEventListener('mouseleave', retomar);
+  toast.addEventListener('focusin', pausar);
+  toast.addEventListener('focusout', function (evento) {
+    if (!toast.contains(evento.relatedTarget)) retomar();
+  });
 }
 
 // Modal com <dialog>: showModal() já prende o foco dentro dele e fecha com Esc.
