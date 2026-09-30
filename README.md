@@ -31,6 +31,7 @@ Projeto desenvolvido nas Experiências Práticas da disciplina de Desenvolviment
 - **Persistência:** rascunho do cadastro e histórico de envios no `localStorage` (o CPF não é salvo).
 - **Componentes de feedback:** badges, alertas, toast e modal.
 - **Mapa da sede:** Leaflet carregado sob demanda.
+- **Temas:** claro, escuro e alto contraste, escolhidos no menu ou automáticos pela preferência do sistema.
 
 ## Tecnologias
 
@@ -83,6 +84,7 @@ Os testes usam o executor nativo do Node (`node --test`), sem dependências, e f
 
 - `validacao.test.js`: regras do cadastro (nome, CPF e dígitos verificadores, idade mínima, e-mail, telefone, CEP, número e grupos obrigatórios).
 - `armazenamento.test.js`: gravação e leitura no `localStorage`, incluindo JSON corrompido e falha de armazenamento.
+- `contraste.test.js`: lê as variáveis de cor do CSS e confere a razão de contraste WCAG de cada par texto/fundo nos temas claro, escuro e alto contraste (4,5:1 no texto e 3:1 em componentes).
 
 A interface (SPA, menu, formulário e componentes) é testada manualmente no navegador, em 375 px e no desktop, com teclado e com o console aberto, seguindo o checklist do modelo de pull request.
 
@@ -119,6 +121,7 @@ js/modules/         um módulo por responsabilidade:
   armazenamento.js    acesso ao localStorage (JSON + try/catch)
   persistencia.js     rascunho e histórico do cadastro
   mapa.js             integração com o Leaflet
+  tema.js             seletor de tema (claro, escuro, alto contraste)
 js/dados/           dados dos projetos e dos estados
 imagens/            imagens otimizadas em WebP e JPG/PNG
 tests/              testes automatizados (node --test)
@@ -139,9 +142,10 @@ O projeto segue as diretrizes da WCAG 2.1 nível AA:
 - landmarks `header`, `nav` (com `aria-label` distintos), `main` e `footer`, e um único `h1` por página;
 - componentes com ARIA onde o HTML não basta: `aria-expanded`/`aria-controls` no menu, `aria-current` na página atual, `aria-busy` durante a troca de página, `role="status"` nos avisos e `<dialog>` nativo no modal;
 - textos só para leitores de tela (classe `.visualmente-oculto`) em grupos obrigatórios e links que abrem nova aba;
-- toasts pausam enquanto o mouse ou o foco estão sobre eles.
+- toasts pausam enquanto o mouse ou o foco estão sobre eles;
+- três temas (claro, escuro e alto contraste), escolhidos no menu "Tema" ou aplicados pela preferência do sistema (`prefers-color-scheme` e `prefers-contrast`), com ajustes para o modo de alto contraste do Windows (`forced-colors`).
 
-**Auditoria:** axe-core 4.10 (regras WCAG 2.0/2.1 A e AA e boas práticas) sem violações nas quatro páginas, inclusive com formulário em erro, modal aberto e toast visível; reflow sem rolagem horizontal em 320 px. Acompanhamento na [issue #2](https://github.com/FehAzevedo/ong-maos-solidarias/issues/2).
+**Auditoria:** axe-core 4.10 (regras WCAG 2.0/2.1 A e AA e boas práticas) sem violações nas quatro páginas e nos três temas, inclusive com formulário em erro, modal aberto e toast visível; reflow sem rolagem horizontal em 320 px. O teste `tests/contraste.test.js` calcula a razão de contraste de cada par de cores em cada tema. Acompanhamento na [issue #2](https://github.com/FehAzevedo/ong-maos-solidarias/issues/2).
 
 ## Fluxo de trabalho e versionamento
 
