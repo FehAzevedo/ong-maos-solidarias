@@ -4,7 +4,7 @@
 import { iniciarMenu } from './modules/menu.js';
 import { iniciarRoteador } from './modules/roteador.js';
 import { renderizarTemplates } from './modules/templates.js';
-import { ativarFeedback } from './modules/feedback.js';
+import { iniciarFeedback } from './modules/feedback.js';
 import { iniciarFormulario } from './modules/formulario.js';
 
 // Liga os comportamentos do conteúdo de uma página. Roda na primeira carga e de
@@ -12,11 +12,12 @@ import { iniciarFormulario } from './modules/formulario.js';
 // Os templates vêm primeiro: o formulário valida os checkboxes gerados por eles.
 function iniciarPagina(raiz) {
   renderizarTemplates(raiz);
-  ativarFeedback(raiz);
   iniciarFormulario(raiz);
 }
 
+// Ouvintes globais (delegação no document): ligados uma única vez
 iniciarMenu();
+iniciarFeedback();
 iniciarPagina(document.getElementById('conteudo'));
 iniciarRoteador(iniciarPagina);
 

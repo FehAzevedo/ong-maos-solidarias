@@ -76,25 +76,21 @@ export function abrirModal(id) {
   modal.showModal();
 }
 
-// Liga os botões com data-toast, data-abrir-modal e data-copiar que estão dentro
-// de "raiz". Recebe a raiz porque roda de novo a cada conteúdo injetado pela SPA.
-export function ativarFeedback(raiz) {
-  // Botões do guia de componentes: data-toast="tipo" e data-abrir-modal="id"
-  raiz.querySelectorAll('[data-toast]').forEach(function (botao) {
-    botao.addEventListener('click', function () {
+// Delegação de eventos: um único ouvinte no documento atende todos os botões com
+// data-toast, data-abrir-modal e data-copiar, inclusive os que chegam depois em
+// conteúdo injetado pela SPA. Por isso é iniciado uma vez só, sem religar a cada página.
+export function iniciarFeedback() {
+  document.addEventListener('click', function (evento) {
+    const botao = evento.target.closest('[data-toast], [data-abrir-modal], [data-copiar]');
+    if (!botao) return;
+
+    // Botões do guia de componentes: data-toast="tipo" e data-abrir-modal="id"
+    if (botao.dataset.toast) {
       mostrarToast(botao.dataset.mensagem, botao.dataset.toast);
-    });
-  });
-
-  raiz.querySelectorAll('[data-abrir-modal]').forEach(function (botao) {
-    botao.addEventListener('click', function () {
+    } else if (botao.dataset.abrirModal) {
       abrirModal(botao.dataset.abrirModal);
-    });
-  });
-
-  // Botões com data-copiar="texto" copiam o texto e confirmam com um toast
-  raiz.querySelectorAll('[data-copiar]').forEach(function (botao) {
-    botao.addEventListener('click', function () {
+    } else {
+      // data-copiar="texto": copia o texto e confirma com um toast
       navigator.clipboard.writeText(botao.dataset.copiar)
         .then(function () {
           mostrarToast('Chave PIX copiada! Agora é só colar no app do seu banco.', 'sucesso');
@@ -102,6 +98,6 @@ export function ativarFeedback(raiz) {
         .catch(function () {
           mostrarToast('Não foi possível copiar. Selecione a chave e copie manualmente.', 'erro');
         });
-    });
+    }
   });
 }
