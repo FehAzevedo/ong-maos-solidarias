@@ -17,6 +17,7 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), a
 - Acessibilidade: o `<main>` recebe foco pelo link "Pular para o conteúdo"; o grupo "Projetos de interesse" é anunciado como obrigatório; o link para o OpenStreetMap avisa que abre em nova aba; o toast pausa enquanto o mouse ou o foco estão sobre ele; a dica do campo nome acompanha a regra de validação
 
 ### build
+- Minificação do HTML com html-minifier-terser e relatório de tamanhos com gzip no build
 - `package.json` com os scripts `start`, `test`, `build` e `preview`
 - Servidor local em Node, sem dependências
 - Build de produção com esbuild: JavaScript em um arquivo minificado, CSS minificado e versão nos links para evitar cache desatualizado
