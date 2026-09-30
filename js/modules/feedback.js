@@ -1,5 +1,5 @@
-// Componentes de feedback compartilhados pelas páginas: toast e modal.
-// Uso:
+// Módulo dos componentes de feedback: toast e modal.
+// Uso (depois de importar):
 //   mostrarToast('Chave PIX copiada!', 'sucesso');   // tipos: sucesso, aviso, erro, info
 //   abrirModal('id-do-dialog');
 
@@ -20,7 +20,7 @@ function areaDeToasts() {
   return area;
 }
 
-function mostrarToast(mensagem, tipo) {
+export function mostrarToast(mensagem, tipo) {
   tipo = tipo || 'info';
 
   const toast = document.createElement('div');
@@ -62,7 +62,7 @@ function mostrarToast(mensagem, tipo) {
 
 // Modal com <dialog>: showModal() já prende o foco dentro dele e fecha com Esc.
 // Aqui só acrescentamos o fechamento ao clicar no fundo escurecido.
-function abrirModal(id) {
+export function abrirModal(id) {
   const modal = document.getElementById(id);
   if (!modal.dataset.preparado) {
     modal.addEventListener('click', function (evento) {
@@ -76,22 +76,24 @@ function abrirModal(id) {
   modal.showModal();
 }
 
-document.addEventListener('DOMContentLoaded', function () {
+// Liga os botões com data-toast, data-abrir-modal e data-copiar que estão dentro
+// de "raiz". Recebe a raiz porque roda de novo a cada conteúdo injetado pela SPA.
+export function ativarFeedback(raiz) {
   // Botões do guia de componentes: data-toast="tipo" e data-abrir-modal="id"
-  document.querySelectorAll('[data-toast]').forEach(function (botao) {
+  raiz.querySelectorAll('[data-toast]').forEach(function (botao) {
     botao.addEventListener('click', function () {
       mostrarToast(botao.dataset.mensagem, botao.dataset.toast);
     });
   });
 
-  document.querySelectorAll('[data-abrir-modal]').forEach(function (botao) {
+  raiz.querySelectorAll('[data-abrir-modal]').forEach(function (botao) {
     botao.addEventListener('click', function () {
       abrirModal(botao.dataset.abrirModal);
     });
   });
 
   // Botões com data-copiar="texto" copiam o texto e confirmam com um toast
-  document.querySelectorAll('[data-copiar]').forEach(function (botao) {
+  raiz.querySelectorAll('[data-copiar]').forEach(function (botao) {
     botao.addEventListener('click', function () {
       navigator.clipboard.writeText(botao.dataset.copiar)
         .then(function () {
@@ -102,4 +104,4 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
   });
-});
+}

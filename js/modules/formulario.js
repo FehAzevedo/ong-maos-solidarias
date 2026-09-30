@@ -1,6 +1,8 @@
-// Máscaras de entrada e validações complementares do formulário de cadastro.
+// Módulo do formulário de cadastro: máscaras de entrada e validações complementares.
 // As validações nativas (required, pattern, type, minlength) continuam ativas;
-// este script formata os campos e cobre regras que o HTML sozinho não verifica.
+// este módulo formata os campos e cobre regras que o HTML sozinho não verifica.
+
+import { mostrarToast, abrirModal } from './feedback.js';
 
 function somenteDigitos(valor) {
   return valor.replace(/\D/g, '');
@@ -53,8 +55,11 @@ function aplicarMascara(campo, mascara) {
   });
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-  const form = document.getElementById('form-cadastro');
+// Chamado a cada página renderizada; só age se o formulário estiver nela.
+export function iniciarFormulario(raiz) {
+  const form = raiz.querySelector('#form-cadastro');
+  if (!form) return;
+
   const cpf = document.getElementById('cpf');
   const telefone = document.getElementById('telefone');
   const cep = document.getElementById('cep');
@@ -122,4 +127,4 @@ document.addEventListener('DOMContentLoaded', function () {
     cpf.setCustomValidity('');
     setTimeout(validarProjetos);
   });
-});
+}

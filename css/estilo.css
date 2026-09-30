@@ -656,12 +656,38 @@ main > section {
   margin-bottom: var(--esp-6);
 }
 
+/* SPA: enquanto a próxima página é buscada, o conteúdo atual esmaece;
+   quando o novo conteúdo é injetado, ele entra com um leve deslocamento */
+main[aria-busy="true"] {
+  opacity: 0.5;
+  transition: opacity var(--transicao);
+}
+
+.conteudo--entrando {
+  animation: conteudo-entrada var(--transicao);
+}
+
+@keyframes conteudo-entrada {
+  from {
+    opacity: 0;
+    transform: translateY(var(--esp-2));
+  }
+}
+
+/* O título recebe foco a cada troca de página (para leitores de tela);
+   o contorno só aparece na navegação por teclado */
+h1:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
+
 main > section:last-child {
   margin-bottom: 0;
 }
 
 /* Traço amarelo sob os títulos das seções: marca visual recorrente */
-main > section > h2::after {
+main > section > h2::after,
+.destaque > h1::after {
   content: "";
   display: block;
   width: var(--esp-6);
@@ -800,9 +826,20 @@ address {
   background: var(--cor-primaria-clara);
 }
 
-.destaque h2,
+.destaque h1,
 .destaque p {
   margin: 0;
+}
+
+/* Título da home: h1 da página, mas no tamanho dos títulos de seção */
+.destaque h1 {
+  font-size: var(--fs-3);
+}
+
+@media (min-width: 768px) {
+  .destaque h1 {
+    font-size: var(--fs-4);
+  }
 }
 
 .destaque p {
