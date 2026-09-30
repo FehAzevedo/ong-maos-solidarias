@@ -135,9 +135,13 @@ O projeto segue as diretrizes da WCAG 2.1 nível AA:
 - navegação completa por teclado, com foco visível em dois tons e link para pular ao conteúdo;
 - na SPA, o foco vai para o título da nova página a cada navegação, para leitores de tela anunciarem a troca;
 - erros do formulário ligados ao campo por `aria-describedby` e `aria-invalid`, sem depender só da cor;
-- áreas de toque de 48 px e respeito a `prefers-reduced-motion`.
+- áreas de toque de 48 px e respeito a `prefers-reduced-motion`;
+- landmarks `header`, `nav` (com `aria-label` distintos), `main` e `footer`, e um único `h1` por página;
+- componentes com ARIA onde o HTML não basta: `aria-expanded`/`aria-controls` no menu, `aria-current` na página atual, `aria-busy` durante a troca de página, `role="status"` nos avisos e `<dialog>` nativo no modal;
+- textos só para leitores de tela (classe `.visualmente-oculto`) em grupos obrigatórios e links que abrem nova aba;
+- toasts pausam enquanto o mouse ou o foco estão sobre eles.
 
-A auditoria completa (ferramentas automáticas, teclado e leitor de tela) é acompanhada na [issue #2](https://github.com/FehAzevedo/ong-maos-solidarias/issues/2).
+**Auditoria:** axe-core 4.10 (regras WCAG 2.0/2.1 A e AA e boas práticas) sem violações nas quatro páginas, inclusive com formulário em erro, modal aberto e toast visível; reflow sem rolagem horizontal em 320 px. Acompanhamento na [issue #2](https://github.com/FehAzevedo/ong-maos-solidarias/issues/2).
 
 ## Fluxo de trabalho e versionamento
 
