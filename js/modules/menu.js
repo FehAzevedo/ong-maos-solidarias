@@ -1,7 +1,8 @@
 // Módulo do menu de navegação responsivo.
 // Em telas pequenas, o botão "Menu" abre e fecha a lista de links (aria-expanded).
-// Sem JavaScript a classe .menu-recolhivel não é aplicada: o botão fica oculto
-// e o menu permanece sempre visível, então a navegação nunca se perde.
+// O script no <head> de cada página aplica a classe "js" no <html> antes da
+// primeira renderização; sem JavaScript (ou sem suporte a módulos) ela não
+// existe: o botão fica oculto e o menu sempre visível, e a navegação nunca se perde.
 // O dropdown do desktop abre só com CSS (:hover e :focus-within); aqui o
 // script apenas permite fechá-lo com Esc.
 
@@ -11,8 +12,6 @@ export function iniciarMenu() {
   const botao = cabecalho.querySelector('.menu-botao');
   const menu = document.getElementById('menu-principal');
   const itensComSubmenu = cabecalho.querySelectorAll('.tem-submenu');
-
-  cabecalho.classList.add('menu-recolhivel');
 
   function menuAberto() {
     return botao.getAttribute('aria-expanded') === 'true';

@@ -440,12 +440,14 @@ main:focus {
   color: var(--cor-sobre-marca);
 }
 
-/* Botão "Menu": só aparece quando o JavaScript ativa o menu recolhível */
+/* Botão "Menu": só aparece com JavaScript (classe "js" no <html>, aplicada
+   no <head> antes da primeira renderização, para o menu já nascer recolhido
+   no celular, sem deslocar o conteúdo depois: CLS) */
 .menu-botao {
   display: none;
 }
 
-.menu-recolhivel .menu-botao {
+.js .menu-botao {
   display: inline-flex;
   align-items: center;
   gap: var(--esp-2);
@@ -514,23 +516,23 @@ main:focus {
    A animação usa a linha do grid indo de 0fr (altura zero) a 1fr (altura
    do conteúdo). visibility: hidden tira os links fechados da navegação
    por teclado e de leitores de tela. */
-.menu-recolhivel {
+.js .cabecalho {
   row-gap: 0;
 }
 
-.menu-recolhivel .menu {
+.js .menu {
   display: grid;
   grid-template-rows: 0fr;
   visibility: hidden;
   transition: grid-template-rows var(--transicao), padding var(--transicao), visibility var(--transicao);
 }
 
-.menu-recolhivel .menu > ul {
+.js .menu > ul {
   min-height: 0;
   overflow: hidden;
 }
 
-.menu-recolhivel .menu-botao[aria-expanded="true"] + .menu {
+.js .menu-botao[aria-expanded="true"] + .menu {
   grid-template-rows: 1fr;
   padding-top: var(--esp-2);
   visibility: visible;
@@ -582,24 +584,24 @@ main:focus {
 
 /* ---------- Menu no notebook/desktop (1024px) ---------- */
 @media (min-width: 1024px) {
-  .menu-recolhivel .menu-botao {
+  .js .menu-botao {
     display: none;
   }
 
   /* Anula o recolhimento: o menu volta a ser uma barra sempre visível */
   .menu,
-  .menu-recolhivel .menu {
+  .js .menu {
     display: block;
     flex-basis: auto;
     visibility: visible;
   }
 
-  .menu-recolhivel .menu,
-  .menu-recolhivel .menu-botao[aria-expanded="true"] + .menu {
+  .js .menu,
+  .js .menu-botao[aria-expanded="true"] + .menu {
     padding-top: 0;
   }
 
-  .menu-recolhivel .menu > ul {
+  .js .menu > ul {
     overflow: visible;
   }
 
@@ -781,6 +783,15 @@ address {
   .grade-cards--tres > :last-child:nth-child(odd) {
     grid-column: span 4;
   }
+}
+
+
+/* Os cards de projeto são gerados por JavaScript depois da primeira
+   renderização. Enquanto a lista está vazia, ela reserva a altura da tela:
+   o que vem depois (Doações) começa fora da área visível e não é empurrado
+   diante da pessoa quando os cards chegam (evita CLS, deslocamento de layout) */
+.js #lista-projetos:empty {
+  min-height: 100vh;
 }
 
 

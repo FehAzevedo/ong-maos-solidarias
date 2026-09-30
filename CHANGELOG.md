@@ -6,6 +6,13 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), a
 
 ## [Não lançado]
 
+### perf
+- Imagens responsivas: versões de 400 e 800 px com `srcset` e `sizes`; JPG recomprimidos (qualidade 80, progressivos) e logotipo PNG com paleta (13 → 5 KB)
+- Deslocamento de layout (CLS) de 0,487 para 0: classe `js` aplicada no `<head>` e espaço reservado para os cards gerados por JavaScript
+
+### fix
+- Favicon (antes, erro 404 no console)
+
 ### feat
 - Temas escuro e de alto contraste, escolhidos no menu ou automáticos por `prefers-color-scheme` e `prefers-contrast`, com a escolha salva no `localStorage`
 - Ajustes para o modo de alto contraste do Windows (`forced-colors`)

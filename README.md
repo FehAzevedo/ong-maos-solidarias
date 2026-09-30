@@ -112,6 +112,23 @@ O build mostra o tamanho antes e depois, também com gzip (a compressão aplicad
 | HTML | 32,0 KB | 25,5 KB (-20%) | 10,5 KB → 9,4 KB (-10%) |
 | **Total** | **132,5 KB** | **75,9 KB (-43%)** | **42,2 KB → 22,8 KB (-46%)** |
 
+### Imagens
+
+- **Formatos:** WebP para os navegadores atuais, com JPG (fotos) e PNG (logotipo) como alternativa via `<picture>`. Em relação aos arquivos originais, as imagens em WebP (fotos e logotipo) somam 198 KB contra 846 KB (-77%).
+- **Resolução:** cada foto tem versões de 400 e 800 px de largura; `srcset` e `sizes` deixam o navegador baixar a menor que fica nítida no tamanho exibido e na densidade da tela. Num desktop comum, os cards de projeto baixam 58 KB em vez de 175 KB.
+- **Dimensões:** `width` e `height` no HTML reservam o espaço antes do carregamento, e as imagens fora da tela usam `loading="lazy"`.
+
+### Desempenho medido (Lighthouse 12, versão de produção)
+
+| Página | Desempenho | Acessibilidade | Boas práticas | SEO | CLS |
+|---|---|---|---|---|---|
+| Início | 100 | 100 | 100 | 100 | 0 |
+| Projetos | 100 | 100 | 100 | 100 | 0 |
+| Cadastro | 100 | 100 | 100 | 100 | 0 |
+| Componentes | 100 | 100 | 100 | 100 | 0 |
+
+Antes das correções, Início e Projetos marcavam 79 de desempenho, com CLS de 0,487: o menu do celular recolhia depois de a página aparecer e empurrava o conteúdo. Agora a classe `js` é aplicada ao `<html>` no `<head>`, antes da primeira renderização, e a lista de cards gerada por JavaScript reserva espaço enquanto está vazia.
+
 Para garantir que a minificação não muda o resultado, as duas versões foram comparadas no navegador: estilos calculados, posição de cada elemento e texto visível são idênticos nas quatro páginas e nos três temas.
 
 ## Estrutura do projeto
