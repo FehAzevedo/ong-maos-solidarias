@@ -60,7 +60,7 @@
   --cor-enfase: var(--cor-primaria);              /* links, números e bordas de destaque sobre o fundo */
   --cor-enfase-forte: var(--cor-primaria-escura); /* títulos e links em hover */
   --cor-sobre-marca: #ffffff;       /* texto sobre o vinho (cabeçalho, botões, rodapé): 8,6:1 */
-  --cor-sobre-destaque: #2b1d1a;    /* texto sobre o amarelo: 8,2:1 */
+  --cor-sobre-destaque: #2b1d1a;    /* texto sobre o amarelo: 8,9:1 */
   --cor-sobre-feedback: #ffffff;    /* símbolo dentro dos ícones de alerta */
   --cor-inverso-fundo: #2b1d1a;     /* toast e blocos de código */
   --cor-inverso-texto: #ffffff;
@@ -376,7 +376,7 @@ main:focus {
   cursor: not-allowed;
 }
 
-/* Chamada principal para doação: amarelo com texto escuro (8,2:1) */
+/* Chamada principal para doação: amarelo com texto escuro (8,9:1) */
 .botao--destaque {
   background: var(--cor-destaque);
   color: var(--cor-sobre-destaque);

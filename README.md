@@ -41,7 +41,7 @@ Projeto desenvolvido nas Experiências Práticas da disciplina de Desenvolviment
 | Estilo | CSS3: variáveis, Grid, Flexbox, `:has()`, `:where()`, media queries |
 | Comportamento | JavaScript ES6+ em ES Modules, History API, `fetch`, `localStorage` |
 | Biblioteca | [Leaflet 1.9.4](https://leafletjs.com/) com mapas do [OpenStreetMap](https://www.openstreetmap.org/copyright), via CDN |
-| Ferramentas | Node.js, npm, [esbuild](https://esbuild.github.io/) (build) e `node:test` (testes) |
+| Ferramentas | Node.js, npm, [esbuild](https://esbuild.github.io/) e [html-minifier-terser](https://github.com/terser/html-minifier-terser) (build) e `node:test` (testes) |
 | Hospedagem | GitHub Pages |
 
 ## Pré-requisitos
@@ -63,7 +63,7 @@ npm start
 
 Acesse http://localhost:5500. Para usar outra porta, defina a variável `PORT` (ex.: `PORT=8080 npm start`).
 
-O `npm install` instala apenas o esbuild, dependência de desenvolvimento usada no build. O site precisa ser servido por HTTP, porque usa ES Modules e `fetch`; abrir o arquivo direto no navegador (`file://`) não carrega o JavaScript. Sem Node, qualquer servidor estático funciona, por exemplo `python -m http.server 5500`.
+O `npm install` instala apenas as dependências de desenvolvimento usadas no build (esbuild e html-minifier-terser). O site precisa ser servido por HTTP, porque usa ES Modules e `fetch`; abrir o arquivo direto no navegador (`file://`) não carrega o JavaScript. Sem Node, qualquer servidor estático funciona, por exemplo `python -m http.server 5500`.
 
 ### Scripts
 
@@ -97,12 +97,22 @@ npm run preview
 
 O build gera a pasta `dist/`, que não vai para o repositório:
 
-- os módulos JavaScript viram um único arquivo minificado (menos requisições);
-- o CSS é minificado;
+- **JavaScript (esbuild):** os módulos viram um único arquivo minificado (menos requisições); o Leaflet, carregado do CDN, fica fora do pacote;
+- **CSS (esbuild):** minificado;
+- **HTML (html-minifier-terser):** sem comentários e espaços entre tags, com o script de tema do `<head>` minificado; o espaço dentro de `<pre>` e entre textos é preservado;
 - os links de CSS e JS nas páginas recebem `?v=<versão>`, para o navegador baixar os arquivos novos a cada publicação em vez de misturar versões guardadas no cache;
-- imagens e páginas são copiadas.
+- as imagens são copiadas (já otimizadas em WebP e JPG/PNG).
 
-Resultado na versão 3.0.0: JavaScript de 43,7 KB para 19,2 KB (-56%) e CSS de 42,3 KB para 23,6 KB (-44%).
+O build mostra o tamanho antes e depois, também com gzip (a compressão aplicada pelo servidor, que é o que o navegador baixa):
+
+| Arquivos | Fonte | Produção | Com gzip |
+|---|---|---|---|
+| JavaScript | 45,8 KB | 19,8 KB (-57%) | 18,5 KB → 7,5 KB (-59%) |
+| CSS | 54,7 KB | 30,5 KB (-44%) | 13,3 KB → 5,8 KB (-56%) |
+| HTML | 32,0 KB | 25,5 KB (-20%) | 10,5 KB → 9,4 KB (-10%) |
+| **Total** | **132,5 KB** | **75,9 KB (-43%)** | **42,2 KB → 22,8 KB (-46%)** |
+
+Para garantir que a minificação não muda o resultado, as duas versões foram comparadas no navegador: estilos calculados, posição de cada elemento e texto visível são idênticos nas quatro páginas e nos três temas.
 
 ## Estrutura do projeto
 
