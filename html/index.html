@@ -5,10 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="ONG Mãos Solidárias: segurança alimentar, educação e inclusão social na zona leste de São Paulo.">
   <title>ONG Mãos Solidárias | Início</title>
-  <!-- Aplica o tema salvo antes do CSS ser desenhado (evita piscar o tema claro) -->
-  <script>try { var tema = JSON.parse(localStorage.getItem('maos-solidarias:tema')); if (tema && tema !== 'automatico') document.documentElement.dataset.tema = tema; } catch (erro) {}</script>
+  <link rel="icon" type="image/png" href="../imagens/favicon.png">
+  <!-- Antes do CSS ser desenhado: marca que há JavaScript (o menu já nasce recolhido
+       no celular, sem deslocar a página) e aplica o tema salvo (sem piscar o tema claro) -->
+  <script>document.documentElement.classList.add('js'); try { var tema = JSON.parse(localStorage.getItem('maos-solidarias:tema')); if (tema && tema !== 'automatico') document.documentElement.dataset.tema = tema; } catch (erro) {}</script>
   <link rel="stylesheet" href="../css/estilo.css">
   <script type="module" src="../js/main.js"></script>
+  <!-- Navegadores sem suporte a módulos não rodam o main.js: o menu volta a ficar sempre visível -->
+  <script nomodule>document.documentElement.classList.remove('js');</script>
 </head>
 <body>
   <a class="pular-link" href="#conteudo">Pular para o conteúdo</a>
@@ -69,8 +73,13 @@
       <p>Desde 2015, a ONG Mãos Solidárias atua na zona leste de São Paulo promovendo segurança alimentar, educação e inclusão social para famílias em situação de vulnerabilidade.</p>
       <figure>
         <picture>
-          <source srcset="../imagens/voluntarios.webp" type="image/webp">
-          <img src="../imagens/voluntarios.jpg" alt="Mãos de vários voluntários empilhadas umas sobre as outras em sinal de união" width="800" height="533">
+          <source type="image/webp"
+                  srcset="../imagens/voluntarios-400.webp 400w, ../imagens/voluntarios.webp 800w"
+                  sizes="(min-width: 1440px) 520px, (min-width: 1024px) 430px, calc(100vw - 32px)">
+          <img src="../imagens/voluntarios.jpg"
+               srcset="../imagens/voluntarios-400.jpg 400w, ../imagens/voluntarios.jpg 800w"
+               sizes="(min-width: 1440px) 520px, (min-width: 1024px) 430px, calc(100vw - 32px)"
+               alt="Mãos de vários voluntários empilhadas umas sobre as outras em sinal de união" width="800" height="533">
         </picture>
         <figcaption>Voluntários reunidos no início de uma ação comunitária.</figcaption>
       </figure>

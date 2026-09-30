@@ -5,10 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Conheça os projetos sociais da ONG Mãos Solidárias na zona leste de São Paulo.">
   <title>Nossos Projetos | ONG Mãos Solidárias</title>
-  <!-- Aplica o tema salvo antes do CSS ser desenhado (evita piscar o tema claro) -->
-  <script>try { var tema = JSON.parse(localStorage.getItem('maos-solidarias:tema')); if (tema && tema !== 'automatico') document.documentElement.dataset.tema = tema; } catch (erro) {}</script>
+  <link rel="icon" type="image/png" href="../imagens/favicon.png">
+  <!-- Antes do CSS ser desenhado: marca que há JavaScript (o menu já nasce recolhido
+       no celular, sem deslocar a página) e aplica o tema salvo (sem piscar o tema claro) -->
+  <script>document.documentElement.classList.add('js'); try { var tema = JSON.parse(localStorage.getItem('maos-solidarias:tema')); if (tema && tema !== 'automatico') document.documentElement.dataset.tema = tema; } catch (erro) {}</script>
   <link rel="stylesheet" href="../css/estilo.css">
   <script type="module" src="../js/main.js"></script>
+  <!-- Navegadores sem suporte a módulos não rodam o main.js: o menu volta a ficar sempre visível -->
+  <script nomodule>document.documentElement.classList.remove('js');</script>
 </head>
 <body>
   <a class="pular-link" href="#conteudo">Pular para o conteúdo</a>
@@ -76,8 +80,9 @@
           </ul>
           <figure>
             <picture>
-              <source type="image/webp" data-campo="imagem-webp">
-              <img width="800" height="533" loading="lazy" alt="" data-campo="imagem">
+              <!-- srcset preenchido por templates.js: versões de 400 e 800 px de largura -->
+              <source type="image/webp" data-campo="imagem-webp" sizes="(min-width: 1440px) 430px, (min-width: 1024px) 360px, (min-width: 768px) calc(50vw - 28px), calc(100vw - 32px)">
+              <img width="800" height="533" loading="lazy" decoding="async" alt="" data-campo="imagem" sizes="(min-width: 1440px) 430px, (min-width: 1024px) 360px, (min-width: 768px) calc(50vw - 28px), calc(100vw - 32px)">
             </picture>
             <figcaption data-campo="legenda"></figcaption>
           </figure>

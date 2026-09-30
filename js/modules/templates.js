@@ -36,7 +36,10 @@ function criarCardProjeto(modelo, projeto) {
   campo('categoria').textContent = projeto.categoria;
   campo('situacao').textContent = projeto.situacao.texto;
   campo('situacao').classList.add('badge--' + projeto.situacao.tipo);
-  campo('imagem-webp').srcset = caminhoImagem + '.webp';
+  // Duas larguras (400 e 800 px): o navegador escolhe a menor que fica nítida
+  // no tamanho exibido (atributo sizes do template) e na densidade da tela
+  campo('imagem-webp').srcset = caminhoImagem + '-400.webp 400w, ' + caminhoImagem + '.webp 800w';
+  campo('imagem').srcset = caminhoImagem + '-400.jpg 400w, ' + caminhoImagem + '.jpg 800w';
   campo('imagem').src = caminhoImagem + '.jpg';
   campo('imagem').alt = projeto.imagem.alt;
   campo('legenda').textContent = projeto.legenda;
