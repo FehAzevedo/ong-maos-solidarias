@@ -140,33 +140,6 @@
             <label for="estado">Estado <span aria-hidden="true">*</span></label>
             <select id="estado" name="estado" required autocomplete="address-level1">
               <option value="">Selecione</option>
-              <option value="AC">Acre</option>
-              <option value="AL">Alagoas</option>
-              <option value="AP">Amapá</option>
-              <option value="AM">Amazonas</option>
-              <option value="BA">Bahia</option>
-              <option value="CE">Ceará</option>
-              <option value="DF">Distrito Federal</option>
-              <option value="ES">Espírito Santo</option>
-              <option value="GO">Goiás</option>
-              <option value="MA">Maranhão</option>
-              <option value="MT">Mato Grosso</option>
-              <option value="MS">Mato Grosso do Sul</option>
-              <option value="MG">Minas Gerais</option>
-              <option value="PA">Pará</option>
-              <option value="PB">Paraíba</option>
-              <option value="PR">Paraná</option>
-              <option value="PE">Pernambuco</option>
-              <option value="PI">Piauí</option>
-              <option value="RJ">Rio de Janeiro</option>
-              <option value="RN">Rio Grande do Norte</option>
-              <option value="RS">Rio Grande do Sul</option>
-              <option value="RO">Rondônia</option>
-              <option value="RR">Roraima</option>
-              <option value="SC">Santa Catarina</option>
-              <option value="SP">São Paulo</option>
-              <option value="SE">Sergipe</option>
-              <option value="TO">Tocantins</option>
             </select>
           </div>
         </div>
@@ -177,11 +150,11 @@
 
         <fieldset id="grupo-projetos" class="grupo-opcoes">
           <legend><h3>Projetos de interesse <span aria-hidden="true">*</span></h3></legend>
-          <div class="grade opcoes">
-            <label><input type="checkbox" name="projetos" value="cozinha-solidaria"> Cozinha Solidária</label>
-            <label><input type="checkbox" name="projetos" value="reforco-escolar"> Reforço Escolar</label>
-            <label><input type="checkbox" name="projetos" value="inclusao-digital"> Inclusão Digital</label>
-          </div>
+          <!-- Opções geradas a partir de js/dados/projetos.js (mesma fonte dos cards) -->
+          <div id="opcoes-projetos" class="grade opcoes"></div>
+          <template id="modelo-opcao-projeto">
+            <label><input type="checkbox" name="projetos" data-campo="checkbox"> <span data-campo="titulo"></span></label>
+          </template>
         </fieldset>
 
         <fieldset class="grupo-opcoes">
