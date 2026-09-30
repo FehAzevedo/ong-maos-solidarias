@@ -6,6 +6,13 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), a
 
 ## [Não lançado]
 
+### feat
+- Temas escuro e de alto contraste, escolhidos no menu ou automáticos por `prefers-color-scheme` e `prefers-contrast`, com a escolha salva no `localStorage`
+- Ajustes para o modo de alto contraste do Windows (`forced-colors`)
+
+### refactor
+- Variáveis de cor separadas por papel (`--cor-enfase`, `--cor-sobre-marca`, `--cor-inverso-fundo`...), para cada tema trocar o fundo sem afetar o texto sobre o vinho
+
 ### fix
 - Acessibilidade: o `<main>` recebe foco pelo link "Pular para o conteúdo"; o grupo "Projetos de interesse" é anunciado como obrigatório; o link para o OpenStreetMap avisa que abre em nova aba; o toast pausa enquanto o mouse ou o foco estão sobre ele; a dica do campo nome acompanha a regra de validação
 
@@ -16,6 +23,7 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), a
 
 ### test
 - Testes automatizados das regras de validação e do acesso ao `localStorage` com `node --test`
+- Teste de contraste WCAG dos pares de cor nos três temas
 
 ### docs
 - README com descrição, estrutura, execução local e fluxo GitFlow (`8e8a5f7`)
