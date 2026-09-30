@@ -71,6 +71,32 @@ Os merges usam `--no-ff`, para que cada funcionalidade apareça agrupada no hist
 
 As versões 1 a 3 foram desenvolvidas diretamente na `main` e marcadas com tags depois. O GitFlow completo passou a ser usado a partir da Experiência Prática IV.
 
+### Versionamento semântico
+
+As versões seguem o formato `MAJOR.MINOR.PATCH`:
+
+- **MAJOR:** entrega de uma nova Experiência Prática ou mudança incompatível (ex.: na 3.0.0 as páginas foram movidas para `html/`, mudando os endereços).
+- **MINOR:** nova funcionalidade compatível com a versão atual.
+- **PATCH:** correção de erro sem mudar funcionalidades.
+
+O histórico de cada versão está no [CHANGELOG](CHANGELOG.md).
+
+### Mensagens de commit
+
+A partir da Experiência Prática IV, as mensagens seguem o [Conventional Commits](https://www.conventionalcommits.org/pt-br/v1.0.0/): `tipo(escopo opcional): descrição no imperativo`.
+
+| Tipo | Quando usar |
+|---|---|
+| `feat` | nova funcionalidade (gera versão MINOR) |
+| `fix` | correção de erro (gera versão PATCH) |
+| `docs` | documentação |
+| `style` | formatação, sem mudar comportamento |
+| `refactor` | reorganização de código, sem mudar comportamento |
+| `perf` | melhoria de desempenho |
+| `chore` | tarefas de manutenção (configuração, publicação) |
+
+Uma mudança incompatível leva `!` depois do tipo (ex.: `feat!:`) ou um rodapé `BREAKING CHANGE:`, e gera versão MAJOR.
+
 ## Tecnologias
 
 - HTML5 semântico, CSS3 (variáveis, Grid, Flexbox, `:has()`, `:where()`) e JavaScript ES6+ (ES Modules)
