@@ -906,6 +906,43 @@ address {
   }
 }
 
+/* Contato: endereço e mapa lado a lado a partir do tablet (5 + 7 colunas) */
+.contato {
+  align-items: start;
+}
+
+.mapa {
+  /* Contexto de empilhamento próprio: os z-index internos do Leaflet
+     (camadas até 1000) não passam por cima do menu, do toast ou do modal */
+  position: relative;
+  z-index: 0;
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  min-height: calc(var(--esp-7) * 5);
+  overflow: hidden;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-lg);
+  background: var(--cor-primaria-clara);
+  box-shadow: var(--sombra-1);
+}
+
+.mapa__alternativa {
+  margin: 0;
+  padding: var(--esp-4);
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .contato > address {
+    grid-column: span 5;
+  }
+
+  .contato > .mapa {
+    grid-column: span 7;
+  }
+}
+
 /* 1280px: destaque dividido em texto (colunas 1 a 7) e indicadores
    empilhados (colunas 9 a 12), aproveitando a largura da tela */
 @media (min-width: 1280px) {
@@ -1229,6 +1266,45 @@ input[type="radio"] {
 .grupo-opcoes.campo--erro .opcoes label {
   border: 2px solid var(--cor-erro);
   background: var(--cor-erro-fundo);
+}
+
+/* Histórico de cadastros salvo no localStorage (cadastro.html) */
+.historico {
+  max-width: 800px;
+  margin-top: var(--esp-6);
+}
+
+.historico[hidden] {
+  display: none;
+}
+
+.historico__lista {
+  display: grid;
+  gap: var(--esp-3);
+  margin: 0 0 var(--esp-4);
+  padding: 0;
+  list-style: none;
+}
+
+.historico__item {
+  padding: var(--esp-3) var(--esp-4);
+  border: 1px solid var(--cor-borda);
+  border-left: var(--esp-1) solid var(--cor-sucesso);
+  border-radius: var(--raio-md);
+  background: var(--cor-superficie);
+}
+
+.historico__item p {
+  margin: 0;
+}
+
+.historico__nome {
+  font-weight: var(--peso-negrito);
+}
+
+.historico__data {
+  font-size: var(--fs-pequeno);
+  color: var(--cor-texto-suave);
 }
 
 /* Mensagem de envio: continua no DOM (region "status") mesmo vazia,

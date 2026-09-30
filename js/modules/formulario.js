@@ -12,6 +12,7 @@
 
 import { mostrarToast, abrirModal } from './feedback.js';
 import { regras, somenteDigitos } from './validacao.js';
+import { iniciarRascunho, registrarEnvio } from './persistencia.js';
 
 // 000.000.000-00
 function mascaraCPF(valor) {
@@ -196,6 +197,7 @@ export function iniciarFormulario(raiz) {
     status.textContent = '';
 
     setTimeout(function () {
+      registrarEnvio(form);   // guarda no histórico antes de limpar os campos
       form.reset();
       botaoEnviar.disabled = false;
       botaoEnviar.textContent = textoBotao;
@@ -209,4 +211,7 @@ export function iniciarFormulario(raiz) {
     camposVerificados.clear();
     limparValidacao(form);
   });
+
+  // Restaura o rascunho salvo no localStorage e passa a salvar as alterações
+  iniciarRascunho(form);
 }

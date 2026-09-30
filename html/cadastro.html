@@ -187,6 +187,22 @@
       <p id="mensagem-status" class="mensagem-status" role="status" aria-live="polite"></p>
     </form>
 
+    <!-- Preenchida por js/modules/persistencia.js a partir do localStorage -->
+    <section id="historico" class="historico" aria-labelledby="historico-titulo" hidden>
+      <h2 id="historico-titulo">Cadastros enviados neste navegador</h2>
+      <p>Esta lista fica guardada apenas neste dispositivo e pode ser apagada a qualquer momento.</p>
+      <ul id="lista-historico" class="historico__lista"></ul>
+      <button type="button" id="apagar-historico" class="botao botao--neutro">Apagar histórico</button>
+
+      <template id="modelo-item-historico">
+        <li class="historico__item">
+          <p class="historico__nome" data-campo="nome"></p>
+          <p data-campo="resumo"></p>
+          <time class="historico__data" data-campo="data"></time>
+        </li>
+      </template>
+    </section>
+
     <dialog id="modal-cadastro" class="modal" aria-labelledby="modal-cadastro-titulo">
       <span class="modal__icone" aria-hidden="true">✓</span>
       <h2 id="modal-cadastro-titulo">Cadastro recebido!</h2>
