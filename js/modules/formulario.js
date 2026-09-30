@@ -88,7 +88,11 @@ export function iniciarFormulario(raiz) {
     const algumMarcado = Array.from(projetos).some(function (p) { return p.checked; });
     projetos[0].setCustomValidity(algumMarcado ? '' : 'Selecione pelo menos um projeto.');
   }
-  projetos.forEach(function (p) { p.addEventListener('change', validarProjetos); });
+  // Os checkboxes são gerados pelo template: em vez de um ouvinte por opção,
+  // um único ouvinte no formulário recebe o "change" que sobe (bubbling) de qualquer uma
+  form.addEventListener('change', function (evento) {
+    if (evento.target.name === 'projetos') validarProjetos();
+  });
   validarProjetos();
 
   // O evento submit só dispara quando todas as validações nativas passam.
