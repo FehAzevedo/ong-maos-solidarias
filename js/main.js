@@ -6,6 +6,8 @@ import { iniciarRoteador } from './modules/roteador.js';
 import { renderizarTemplates } from './modules/templates.js';
 import { iniciarFeedback } from './modules/feedback.js';
 import { iniciarFormulario } from './modules/formulario.js';
+import { iniciarHistorico } from './modules/persistencia.js';
+import { iniciarMapa } from './modules/mapa.js';
 
 // Liga os comportamentos do conteúdo de uma página. Roda na primeira carga e de
 // novo a cada troca de página feita pelo roteador, só dentro do <main> novo.
@@ -13,6 +15,8 @@ import { iniciarFormulario } from './modules/formulario.js';
 function iniciarPagina(raiz) {
   renderizarTemplates(raiz);
   iniciarFormulario(raiz);
+  iniciarHistorico(raiz);
+  iniciarMapa(raiz);
 }
 
 // Ouvintes globais (delegação no document): ligados uma única vez

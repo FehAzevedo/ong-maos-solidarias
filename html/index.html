@@ -87,13 +87,21 @@
       </div>
     </section>
 
-    <section id="contato">
+    <section id="contato" class="contato grade">
       <h2>Contato</h2>
       <address class="card">
         <p>Rua das Flores, 123, Itaquera, São Paulo/SP, CEP 08210-000</p>
         <p>Telefone: <a href="tel:+551140028922">(11) 4002-8922</a></p>
         <p>E-mail: <a href="mailto:contato@maossolidarias.org.br">contato@maossolidarias.org.br</a></p>
       </address>
+
+      <!-- Mapa interativo montado por js/modules/mapa.js (biblioteca Leaflet).
+           O link abaixo é a alternativa se o mapa não carregar. -->
+      <div id="mapa-sede" class="mapa" role="region" aria-label="Mapa com a localização da sede em Itaquera">
+        <p class="mapa__alternativa">
+          <a href="https://www.openstreetmap.org/?mlat=-23.5427&amp;mlon=-46.4718#map=16/-23.5427/-46.4718" target="_blank" rel="noopener">Ver a localização da sede no OpenStreetMap</a>
+        </p>
+      </div>
     </section>
   </main>
 
