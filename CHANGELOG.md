@@ -6,9 +6,19 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), a
 
 ## [Não lançado]
 
+### build
+- `package.json` com os scripts `start`, `test`, `build` e `preview`
+- Servidor local em Node, sem dependências
+- Build de produção com esbuild: JavaScript em um arquivo minificado, CSS minificado e versão nos links para evitar cache desatualizado
+
+### test
+- Testes automatizados das regras de validação e do acesso ao `localStorage` com `node --test`
+
 ### docs
 - README com descrição, estrutura, execução local e fluxo GitFlow (`8e8a5f7`)
-- CHANGELOG e padrão de mensagens de commit
+- CHANGELOG e padrão de mensagens de commit (`4b435fb`)
+- Modelos de issue e de pull request (`f2a8ca9`, PR #6)
+- README com pré-requisitos, instalação, scripts, testes e build
 
 ## [3.0.0] - 2026-09-29
 
