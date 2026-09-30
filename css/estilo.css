@@ -17,6 +17,7 @@
    12. Rodapé
    13. Componentes de feedback (badges, alertas, toast, modal)
    14. Telas panorâmicas
+   15. Temas: escuro, alto contraste e cores forçadas
 
    Abordagem mobile-first: o estilo base atende celulares pequenos e cada
    @media (min-width) acrescenta comportamento para telas maiores.
@@ -53,6 +54,18 @@
   --cor-destaque: #f2b705;          /* botão "Doar", indicador da página atual, foco */
   --cor-destaque-escura: #d9a404;   /* hover do botão de destaque */
 
+  /* ---------- Papéis de cor (o que muda de um tema para outro) ----------
+     As cores acima são a paleta; estas dizem ONDE cada cor é usada. Assim o
+     tema escuro troca o texto sobre o fundo sem mexer no texto sobre o vinho. */
+  --cor-enfase: var(--cor-primaria);              /* links, números e bordas de destaque sobre o fundo */
+  --cor-enfase-forte: var(--cor-primaria-escura); /* títulos e links em hover */
+  --cor-sobre-marca: #ffffff;       /* texto sobre o vinho (cabeçalho, botões, rodapé): 8,6:1 */
+  --cor-sobre-destaque: #2b1d1a;    /* texto sobre o amarelo: 8,9:1 */
+  --cor-sobre-feedback: #ffffff;    /* símbolo dentro dos ícones de alerta */
+  --cor-inverso-fundo: #2b1d1a;     /* toast e blocos de código */
+  --cor-inverso-texto: #ffffff;
+  --cor-contorno: transparent;      /* contorno extra de componentes (visível no alto contraste) */
+
   /* ---------- Neutras (quentes, para conversar com o vinho) ---------- */
   --cor-texto: #2b1d1a;             /* texto principal: 16,2:1 sobre branco */
   --cor-texto-suave: #5c4f4b;       /* legendas e dicas: 7,8:1 sobre branco */
@@ -80,6 +93,9 @@
   --cor-borda-clara: rgba(255, 255, 255, 0.6);          /* borda do botão Menu */
   --cor-sombra-forte: rgba(43, 29, 26, 0.24);
   --cor-sobreposicao-escura: rgba(43, 29, 26, 0.6);      /* fundo atrás do modal */
+
+  /* Controles nativos (select, calendário, barra de rolagem) seguem o tema */
+  color-scheme: light;
 
   /* ---------- Tipografia ---------- */
   /* Fontes do sistema: nenhum download extra, bom para conexões limitadas */
@@ -170,13 +186,13 @@ img {
 }
 
 a {
-  color: var(--cor-primaria);
+  color: var(--cor-enfase);
   text-underline-offset: 0.2em;
   transition: color var(--transicao);
 }
 
 a:hover {
-  color: var(--cor-primaria-escura);
+  color: var(--cor-enfase-forte);
   text-decoration-thickness: 2px;
 }
 
@@ -189,7 +205,7 @@ h2,
 h3 {
   margin: 0 0 var(--esp-3);
   line-height: var(--altura-linha-titulo);
-  color: var(--cor-primaria-escura);
+  color: var(--cor-enfase-forte);
 }
 
 h1 {
@@ -240,6 +256,26 @@ figcaption {
    4. ACESSIBILIDADE
    ===================================================================== */
 
+/* Texto só para leitores de tela: fora da tela, mas presente na árvore de acessibilidade */
+.visualmente-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* O <main> recebe foco pelo link "Pular para o conteúdo" (tabindex="-1");
+   o contorno ficaria em volta da página inteira, então é omitido */
+main:focus {
+  outline: none;
+  box-shadow: none;
+}
+
 /* Link "Pular para o conteúdo": invisível até receber foco pelo teclado */
 .pular-link {
   position: absolute;
@@ -249,7 +285,7 @@ figcaption {
   padding: var(--esp-2) var(--esp-3);
   border-radius: var(--raio-md);
   background: var(--cor-destaque);
-  color: var(--cor-texto);
+  color: var(--cor-sobre-destaque);
   font-weight: var(--peso-negrito);
   transform: translateY(-200%);
   transition: transform var(--transicao);
@@ -293,10 +329,10 @@ figcaption {
   gap: var(--esp-2);
   min-height: var(--alvo-toque);
   padding: var(--esp-2) var(--esp-4);
-  border: 2px solid transparent;
+  border: 2px solid var(--cor-contorno);
   border-radius: var(--raio-md);
   background: var(--cor-primaria);
-  color: var(--cor-superficie);
+  color: var(--cor-sobre-marca);
   font: inherit;
   font-weight: var(--peso-medio);
   text-decoration: none;
@@ -312,7 +348,7 @@ figcaption {
 /* :hover: fundo mais escuro, sombra e leve elevação */
 .botao:hover:not(:disabled) {
   background: var(--cor-primaria-escura);
-  color: var(--cor-superficie);
+  color: var(--cor-sobre-marca);
   box-shadow: var(--sombra-2);
   transform: translateY(-2px);
 }
@@ -340,15 +376,15 @@ figcaption {
   cursor: not-allowed;
 }
 
-/* Chamada principal para doação: amarelo com texto escuro (8,2:1) */
+/* Chamada principal para doação: amarelo com texto escuro (8,9:1) */
 .botao--destaque {
   background: var(--cor-destaque);
-  color: var(--cor-texto);
+  color: var(--cor-sobre-destaque);
 }
 
 .botao--destaque:hover:not(:disabled) {
   background: var(--cor-destaque-escura);
-  color: var(--cor-texto);
+  color: var(--cor-sobre-destaque);
 }
 
 /* Ação secundária (ex.: limpar formulário) */
@@ -384,14 +420,15 @@ figcaption {
   /* Conteúdo alinhado à largura máxima, fundo ocupando a tela inteira */
   padding: var(--esp-3) max(var(--esp-3), calc((100% - var(--largura-max)) / 2));
   background: var(--cor-primaria);
-  color: var(--cor-superficie);
+  color: var(--cor-sobre-marca);
+  border-bottom: 2px solid var(--cor-contorno);
 }
 
 .cabecalho__logo {
   width: 56px;
   height: 56px;
   border-radius: var(--raio-md);
-  background: var(--cor-superficie);
+  background: var(--cor-sobre-marca);
 }
 
 .marca {
@@ -400,15 +437,17 @@ figcaption {
   font-size: var(--fs-2);
   font-weight: var(--peso-negrito);
   line-height: var(--altura-linha-titulo);
-  color: var(--cor-superficie);
+  color: var(--cor-sobre-marca);
 }
 
-/* Botão "Menu": só aparece quando o JavaScript ativa o menu recolhível */
+/* Botão "Menu": só aparece com JavaScript (classe "js" no <html>, aplicada
+   no <head> antes da primeira renderização, para o menu já nascer recolhido
+   no celular, sem deslocar o conteúdo depois: CLS) */
 .menu-botao {
   display: none;
 }
 
-.menu-recolhivel .menu-botao {
+.js .menu-botao {
   display: inline-flex;
   align-items: center;
   gap: var(--esp-2);
@@ -417,7 +456,7 @@ figcaption {
   border: 2px solid var(--cor-borda-clara);
   border-radius: var(--raio-md);
   background: transparent;
-  color: var(--cor-superficie);
+  color: var(--cor-sobre-marca);
   font: inherit;
   font-weight: var(--peso-medio);
   cursor: pointer;
@@ -477,23 +516,23 @@ figcaption {
    A animação usa a linha do grid indo de 0fr (altura zero) a 1fr (altura
    do conteúdo). visibility: hidden tira os links fechados da navegação
    por teclado e de leitores de tela. */
-.menu-recolhivel {
+.js .cabecalho {
   row-gap: 0;
 }
 
-.menu-recolhivel .menu {
+.js .menu {
   display: grid;
   grid-template-rows: 0fr;
   visibility: hidden;
   transition: grid-template-rows var(--transicao), padding var(--transicao), visibility var(--transicao);
 }
 
-.menu-recolhivel .menu > ul {
+.js .menu > ul {
   min-height: 0;
   overflow: hidden;
 }
 
-.menu-recolhivel .menu-botao[aria-expanded="true"] + .menu {
+.js .menu-botao[aria-expanded="true"] + .menu {
   grid-template-rows: 1fr;
   padding-top: var(--esp-2);
   visibility: visible;
@@ -514,7 +553,7 @@ figcaption {
   min-height: var(--alvo-toque);
   padding: var(--esp-2) var(--esp-3);
   border-radius: var(--raio-md);
-  color: var(--cor-superficie);
+  color: var(--cor-sobre-marca);
   font-weight: var(--peso-medio);
   text-decoration: none;
   transition: background-color var(--transicao), color var(--transicao);
@@ -522,7 +561,7 @@ figcaption {
 
 .menu a:hover {
   background: var(--cor-sobreposicao-clara);
-  color: var(--cor-superficie);
+  color: var(--cor-sobre-marca);
 }
 
 /* Página atual: barra amarela, não depende só de cor do texto */
@@ -545,24 +584,24 @@ figcaption {
 
 /* ---------- Menu no notebook/desktop (1024px) ---------- */
 @media (min-width: 1024px) {
-  .menu-recolhivel .menu-botao {
+  .js .menu-botao {
     display: none;
   }
 
   /* Anula o recolhimento: o menu volta a ser uma barra sempre visível */
   .menu,
-  .menu-recolhivel .menu {
+  .js .menu {
     display: block;
     flex-basis: auto;
     visibility: visible;
   }
 
-  .menu-recolhivel .menu,
-  .menu-recolhivel .menu-botao[aria-expanded="true"] + .menu {
+  .js .menu,
+  .js .menu-botao[aria-expanded="true"] + .menu {
     padding-top: 0;
   }
 
-  .menu-recolhivel .menu > ul {
+  .js .menu > ul {
     overflow: visible;
   }
 
@@ -636,7 +675,7 @@ figcaption {
 
   .menu .submenu a:hover {
     background: var(--cor-primaria-clara);
-    color: var(--cor-primaria-escura);
+    color: var(--cor-enfase-forte);
   }
 }
 
@@ -747,6 +786,15 @@ address {
 }
 
 
+/* Os cards de projeto são gerados por JavaScript depois da primeira
+   renderização. Enquanto a lista está vazia, ela reserva a altura da tela:
+   o que vem depois (Doações) começa fora da área visível e não é empurrado
+   diante da pessoa quando os cards chegam (evita CLS, deslocamento de layout) */
+.js #lista-projetos:empty {
+  min-height: 100vh;
+}
+
+
 /* =====================================================================
    8. CARDS
    ===================================================================== */
@@ -824,6 +872,7 @@ address {
   padding: var(--esp-5) var(--esp-4);
   border-radius: var(--raio-lg);
   background: var(--cor-primaria-clara);
+  border: 2px solid var(--cor-contorno);
 }
 
 .destaque h1,
@@ -867,7 +916,7 @@ address {
   display: block;
   font-size: var(--fs-4);
   line-height: var(--altura-linha-titulo);
-  color: var(--cor-primaria);
+  color: var(--cor-enfase);
 }
 
 /* "Quem Somos": no celular, título, texto e foto empilhados sem espaço extra */
@@ -983,7 +1032,7 @@ address {
   align-items: center;
   min-height: var(--alvo-toque);
   padding: var(--esp-2) var(--esp-4);
-  border: 2px solid var(--cor-primaria);
+  border: 2px solid var(--cor-enfase);
   border-radius: var(--raio-pilula);
   background: var(--cor-superficie);
   font-weight: var(--peso-medio);
@@ -993,7 +1042,7 @@ address {
 
 .navegacao-interna a:hover {
   background: var(--cor-primaria);
-  color: var(--cor-superficie);
+  color: var(--cor-sobre-marca);
 }
 
 /* Chave PIX: caixa fácil de localizar e de selecionar para copiar */
@@ -1014,11 +1063,12 @@ address {
   padding: var(--esp-5) var(--esp-4);
   border-radius: var(--raio-lg);
   background: var(--cor-primaria);
-  color: var(--cor-superficie);
+  color: var(--cor-sobre-marca);
+  border: 2px solid var(--cor-contorno);
 }
 
 .chamada h2 {
-  color: var(--cor-superficie);
+  color: var(--cor-sobre-marca);
 }
 
 .chamada p {
@@ -1148,7 +1198,7 @@ textarea:hover {
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  border-color: var(--cor-primaria);
+  border-color: var(--cor-enfase);
 }
 
 /* Verificação do preenchimento (js/modules/formulario.js).
@@ -1218,7 +1268,7 @@ input[type="radio"] {
   width: 1.25rem;
   height: 1.25rem;
   margin: 0;
-  accent-color: var(--cor-primaria);
+  accent-color: var(--cor-enfase);
 }
 
 /* Checkbox e radio como "cartões" clicáveis: área de toque maior */
@@ -1240,14 +1290,14 @@ input[type="radio"] {
 }
 
 .opcoes label:hover {
-  border-color: var(--cor-primaria);
+  border-color: var(--cor-enfase);
 }
 
 /* Opção marcada: muda fundo, borda e peso (não só a cor) */
 .opcoes label:has(:checked) {
-  border: 2px solid var(--cor-primaria);
+  border: 2px solid var(--cor-enfase);
   background: var(--cor-primaria-clara);
-  color: var(--cor-primaria-escura);
+  color: var(--cor-enfase-forte);
   font-weight: var(--peso-medio);
 }
 
@@ -1352,7 +1402,8 @@ input[type="radio"] {
   grid-area: rodape;
   padding: var(--esp-5) max(var(--esp-3), calc((100% - var(--largura-max)) / 2));
   background: var(--cor-primaria-escura);
-  color: var(--cor-superficie);
+  color: var(--cor-sobre-marca);
+  border-top: 2px solid var(--cor-contorno);
   font-size: var(--fs-pequeno);
   text-align: center;
 }
@@ -1367,7 +1418,7 @@ input[type="radio"] {
 }
 
 .rodape a {
-  color: var(--cor-superficie);
+  color: var(--cor-sobre-marca);
 }
 
 .rodape a:hover {
@@ -1391,7 +1442,7 @@ input[type="radio"] {
 .badge,
 .alerta,
 .toast {
-  --feedback-cor: var(--cor-primaria-escura);
+  --feedback-cor: var(--cor-enfase-forte);
   --feedback-fundo: var(--cor-primaria-clara);
 }
 
@@ -1482,7 +1533,7 @@ input[type="radio"] {
   height: 1.5rem;
   border-radius: 50%;
   background: var(--feedback-cor);
-  color: var(--cor-superficie);
+  color: var(--cor-sobre-feedback);
   font-size: var(--fs-pequeno);
   font-weight: var(--peso-negrito);
   line-height: 1;
@@ -1517,10 +1568,11 @@ input[type="radio"] {
   align-items: center;
   gap: var(--esp-3);
   padding: var(--esp-3);
-  border-left: var(--esp-1) solid var(--feedback-cor);
   border-radius: var(--raio-md);
-  background: var(--cor-texto);
-  color: var(--cor-superficie);
+  background: var(--cor-inverso-fundo);
+  color: var(--cor-inverso-texto);
+  border: 2px solid var(--cor-contorno);
+  border-left: var(--esp-1) solid var(--feedback-cor);
   box-shadow: var(--sombra-3);
   pointer-events: auto;
   /* Estado inicial da animação: abaixo e transparente */
@@ -1555,7 +1607,7 @@ input[type="radio"] {
 }
 
 .toast .toast__icone {
-  color: var(--cor-texto);
+  color: var(--cor-sobre-destaque);
 }
 
 .toast__fechar {
@@ -1569,7 +1621,7 @@ input[type="radio"] {
   border: 0;
   border-radius: var(--raio-md);
   background: transparent;
-  color: var(--cor-superficie);
+  color: var(--cor-inverso-texto);
   font: inherit;
   font-size: var(--fs-2);
   cursor: pointer;
@@ -1584,7 +1636,7 @@ input[type="radio"] {
 .modal {
   width: min(32rem, calc(100% - var(--esp-5)));
   padding: var(--esp-5) var(--esp-4);
-  border: 0;
+  border: 2px solid var(--cor-contorno);
   border-top: var(--esp-1) solid var(--cor-sucesso);
   border-radius: var(--raio-lg);
   background: var(--cor-superficie);
@@ -1678,8 +1730,9 @@ code {
   padding: var(--esp-3) var(--esp-4);
   overflow-x: auto;
   border-radius: var(--raio-md);
-  background: var(--cor-texto);
-  color: var(--cor-superficie);
+  background: var(--cor-inverso-fundo);
+  color: var(--cor-inverso-texto);
+  border: 2px solid var(--cor-contorno);
   font-size: var(--fs-pequeno);
   line-height: var(--altura-linha-texto);
 }
@@ -1734,4 +1787,215 @@ code {
   html {
     font-size: 106.25%;
   }
+}
+
+
+/* =====================================================================
+   15. TEMAS: ESCURO, ALTO CONTRASTE E CORES FORÇADAS
+   Os temas só redefinem as variáveis de cor; nenhuma regra de layout muda.
+   Cada tema vale de duas formas:
+     - escolhido no seletor "Tema" do menu (atributo data-tema no <html>,
+       salvo no localStorage por js/modules/tema.js);
+     - automaticamente, pela preferência do sistema, quando a pessoa deixa
+       o tema em "Automático" (sem data-tema): prefers-color-scheme e
+       prefers-contrast. Por isso os valores aparecem duas vezes em cada tema.
+   Os contrastes de todos os pares texto/fundo são conferidos pelo teste
+   tests/contraste.test.js (mínimo 4,5:1 no texto e 3:1 em componentes).
+   ===================================================================== */
+
+/* ---------- Tema escuro: fundos quentes quase pretos, texto claro ---------- */
+:root[data-tema="escuro"] {
+  color-scheme: dark;
+  --cor-fundo: #1b1412;
+  --cor-superficie: #271d1a;
+  --cor-texto: #f5eeeb;
+  --cor-texto-suave: #cdbdb7;
+  --cor-borda: #43342f;
+  --cor-borda-forte: #a08c85;
+  --cor-primaria-clara: #3d1b22;
+  --cor-secundaria: #e6a888;
+  --cor-secundaria-escura: #f3d2bd;
+  --cor-enfase: #ff94a8;
+  --cor-enfase-forte: #ffc2cd;
+  --cor-sucesso: #7fd4ab;
+  --cor-sucesso-fundo: #15302a;
+  --cor-erro: #ff9e7d;
+  --cor-erro-fundo: #3d1e16;
+  --cor-aviso-fundo: #3b2f10;
+  --cor-sucesso-clara: #7fd4ab;
+  --cor-erro-clara: #ff9e7d;
+  --cor-sobre-feedback: #1b1412;
+  --cor-inverso-fundo: #3a2c28;
+  --cor-inverso-texto: #ffffff;
+  --cor-sombra: rgba(0, 0, 0, 0.45);
+  --cor-sombra-forte: rgba(0, 0, 0, 0.6);
+  --cor-sobreposicao-escura: rgba(0, 0, 0, 0.7);
+  --icone-sucesso: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237fd4ab' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E");
+  --icone-erro: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%23ff9e7d'/%3E%3Cpath d='M12 6.5v7' stroke='%231b1412' stroke-width='2.5' stroke-linecap='round'/%3E%3Ccircle cx='12' cy='17.25' r='1.5' fill='%231b1412'/%3E%3C/svg%3E");
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema]) {
+    color-scheme: dark;
+    --cor-fundo: #1b1412;
+    --cor-superficie: #271d1a;
+    --cor-texto: #f5eeeb;
+    --cor-texto-suave: #cdbdb7;
+    --cor-borda: #43342f;
+    --cor-borda-forte: #a08c85;
+    --cor-primaria-clara: #3d1b22;
+    --cor-secundaria: #e6a888;
+    --cor-secundaria-escura: #f3d2bd;
+    --cor-enfase: #ff94a8;
+    --cor-enfase-forte: #ffc2cd;
+    --cor-sucesso: #7fd4ab;
+    --cor-sucesso-fundo: #15302a;
+    --cor-erro: #ff9e7d;
+    --cor-erro-fundo: #3d1e16;
+    --cor-aviso-fundo: #3b2f10;
+    --cor-sucesso-clara: #7fd4ab;
+    --cor-erro-clara: #ff9e7d;
+    --cor-sobre-feedback: #1b1412;
+    --cor-inverso-fundo: #3a2c28;
+    --cor-inverso-texto: #ffffff;
+    --cor-sombra: rgba(0, 0, 0, 0.45);
+    --cor-sombra-forte: rgba(0, 0, 0, 0.6);
+    --cor-sobreposicao-escura: rgba(0, 0, 0, 0.7);
+    --icone-sucesso: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237fd4ab' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E");
+    --icone-erro: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%23ff9e7d'/%3E%3Cpath d='M12 6.5v7' stroke='%231b1412' stroke-width='2.5' stroke-linecap='round'/%3E%3Ccircle cx='12' cy='17.25' r='1.5' fill='%231b1412'/%3E%3C/svg%3E");
+  }
+}
+
+/* ---------- Alto contraste: preto, branco e amarelo, com contornos ----------
+   Para baixa visão e daltonismo: contraste máximo (21:1 no texto), links e
+   destaques em amarelo, e bordas brancas em botões, toast, modal e seções
+   que antes se separavam só pela cor de fundo. */
+:root[data-tema="alto-contraste"] {
+  color-scheme: dark;
+  --cor-fundo: #000000;
+  --cor-superficie: #000000;
+  --cor-texto: #ffffff;
+  --cor-texto-suave: #ffffff;
+  --cor-borda: #ffffff;
+  --cor-borda-forte: #ffffff;
+  --cor-primaria: #000000;
+  --cor-primaria-escura: #000000;
+  --cor-primaria-clara: #000000;
+  --cor-secundaria: #ffffff;
+  --cor-secundaria-escura: #ffffff;
+  --cor-destaque: #ffff00;
+  --cor-destaque-escura: #ffff00;
+  --cor-enfase: #ffff00;
+  --cor-enfase-forte: #ffff00;
+  --cor-sobre-marca: #ffffff;
+  --cor-sobre-destaque: #000000;
+  --cor-sobre-feedback: #000000;
+  --cor-sucesso: #5cff8a;
+  --cor-sucesso-fundo: #000000;
+  --cor-erro: #ff8a8a;
+  --cor-erro-fundo: #000000;
+  --cor-aviso-fundo: #000000;
+  --cor-sucesso-clara: #5cff8a;
+  --cor-erro-clara: #ff8a8a;
+  --cor-inverso-fundo: #000000;
+  --cor-inverso-texto: #ffffff;
+  --cor-contorno: #ffffff;
+  --cor-sombra: transparent;
+  --cor-sombra-forte: transparent;
+  --cor-sobreposicao-clara: rgba(255, 255, 255, 0.25);
+  --cor-borda-clara: #ffffff;
+  --cor-sobreposicao-escura: rgba(0, 0, 0, 0.85);
+  --icone-sucesso: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235cff8a' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E");
+  --icone-erro: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%23ff8a8a'/%3E%3Cpath d='M12 6.5v7' stroke='black' stroke-width='2.5' stroke-linecap='round'/%3E%3Ccircle cx='12' cy='17.25' r='1.5' fill='black'/%3E%3C/svg%3E");
+}
+
+@media (prefers-contrast: more) {
+  :root:not([data-tema]) {
+    color-scheme: dark;
+    --cor-fundo: #000000;
+    --cor-superficie: #000000;
+    --cor-texto: #ffffff;
+    --cor-texto-suave: #ffffff;
+    --cor-borda: #ffffff;
+    --cor-borda-forte: #ffffff;
+    --cor-primaria: #000000;
+    --cor-primaria-escura: #000000;
+    --cor-primaria-clara: #000000;
+    --cor-secundaria: #ffffff;
+    --cor-secundaria-escura: #ffffff;
+    --cor-destaque: #ffff00;
+    --cor-destaque-escura: #ffff00;
+    --cor-enfase: #ffff00;
+    --cor-enfase-forte: #ffff00;
+    --cor-sobre-marca: #ffffff;
+    --cor-sobre-destaque: #000000;
+    --cor-sobre-feedback: #000000;
+    --cor-sucesso: #5cff8a;
+    --cor-sucesso-fundo: #000000;
+    --cor-erro: #ff8a8a;
+    --cor-erro-fundo: #000000;
+    --cor-aviso-fundo: #000000;
+    --cor-sucesso-clara: #5cff8a;
+    --cor-erro-clara: #ff8a8a;
+    --cor-inverso-fundo: #000000;
+    --cor-inverso-texto: #ffffff;
+    --cor-contorno: #ffffff;
+    --cor-sombra: transparent;
+    --cor-sombra-forte: transparent;
+    --cor-sobreposicao-clara: rgba(255, 255, 255, 0.25);
+    --cor-borda-clara: #ffffff;
+    --cor-sobreposicao-escura: rgba(0, 0, 0, 0.85);
+    --icone-sucesso: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235cff8a' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E");
+    --icone-erro: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%23ff8a8a'/%3E%3Cpath d='M12 6.5v7' stroke='black' stroke-width='2.5' stroke-linecap='round'/%3E%3Ccircle cx='12' cy='17.25' r='1.5' fill='black'/%3E%3C/svg%3E");
+  }
+}
+
+/* ---------- Cores forçadas (modo de alto contraste do Windows) ----------
+   O sistema troca todas as cores pelas da paleta escolhida pela pessoa e
+   remove fundos e sombras. Estes ajustes repõem o que dependia só deles. */
+@media (forced-colors: active) {
+  /* O ícone do menu é desenhado com fundo: usa a cor de texto dos botões */
+  .menu-botao__icone,
+  .menu-botao__icone::before,
+  .menu-botao__icone::after {
+    forced-color-adjust: none;
+    background: ButtonText;
+  }
+
+  .menu-botao[aria-expanded="true"] .menu-botao__icone {
+    background: transparent;
+  }
+
+  /* A página atual era marcada por uma barra (box-shadow), que é removida */
+  .menu a[aria-current="page"] {
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+  }
+
+  /* A opção marcada era diferenciada pelo fundo */
+  .opcoes label:has(:checked) {
+    outline: 2px solid Highlight;
+  }
+
+  /* O anel de foco em dois tons usa box-shadow, removido neste modo */
+  :focus-visible {
+    outline: 3px solid Highlight;
+  }
+}
+
+/* ---------- Seletor de tema (último item do menu) ---------- */
+.menu__tema {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+  padding: var(--esp-2) var(--esp-3);
+  color: var(--cor-sobre-marca);
+  font-weight: var(--peso-medio);
+}
+
+.menu__tema select {
+  width: auto;
+  min-height: var(--alvo-toque);
+  padding: var(--esp-1) var(--esp-2);
+  font-size: var(--fs-pequeno);
 }

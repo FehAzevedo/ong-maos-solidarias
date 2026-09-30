@@ -5,8 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Cadastre-se como voluntário da ONG Mãos Solidárias.">
   <title>Seja Voluntário | ONG Mãos Solidárias</title>
+  <link rel="icon" type="image/png" href="../imagens/favicon.png">
+  <!-- Antes do CSS ser desenhado: marca que há JavaScript (o menu já nasce recolhido
+       no celular, sem deslocar a página) e aplica o tema salvo (sem piscar o tema claro) -->
+  <script>document.documentElement.classList.add('js'); try { var tema = JSON.parse(localStorage.getItem('maos-solidarias:tema')); if (tema && tema !== 'automatico') document.documentElement.dataset.tema = tema; } catch (erro) {}</script>
   <link rel="stylesheet" href="../css/estilo.css">
   <script type="module" src="../js/main.js"></script>
+  <!-- Navegadores sem suporte a módulos não rodam o main.js: o menu volta a ficar sempre visível -->
+  <script nomodule>document.documentElement.classList.remove('js');</script>
 </head>
 <body>
   <a class="pular-link" href="#conteudo">Pular para o conteúdo</a>
@@ -34,11 +40,20 @@
           </ul>
         </li>
         <li><a href="cadastro.html" aria-current="page">Seja Voluntário</a></li>
+        <li class="menu__tema">
+          <label for="seletor-tema">Tema</label>
+          <select id="seletor-tema">
+            <option value="automatico">Automático</option>
+            <option value="claro">Claro</option>
+            <option value="escuro">Escuro</option>
+            <option value="alto-contraste">Alto contraste</option>
+          </select>
+        </li>
       </ul>
     </nav>
   </header>
 
-  <main id="conteudo">
+  <main id="conteudo" tabindex="-1">
     <h1>Seja Voluntário</h1>
     <p class="introducao">Preencha o formulário abaixo. Campos marcados com <span aria-hidden="true">*</span> são obrigatórios.</p>
 
@@ -59,7 +74,7 @@
             <label for="nome">Nome completo <span aria-hidden="true">*</span></label>
             <input type="text" id="nome" name="nome" required minlength="3" maxlength="100"
                    pattern="[A-Za-zÀ-ÿ' \-]+" autocomplete="name"
-                   title="Use apenas letras e espaços, com no mínimo 3 caracteres.">
+                   title="Informe nome e sobrenome, usando apenas letras.">
           </div>
 
           <div class="campo">
@@ -149,7 +164,7 @@
         <legend><h2>Participação</h2></legend>
 
         <fieldset id="grupo-projetos" class="grupo-opcoes">
-          <legend><h3>Projetos de interesse <span aria-hidden="true">*</span></h3></legend>
+          <legend><h3>Projetos de interesse <span aria-hidden="true">*</span><span class="visualmente-oculto">(obrigatório, escolha pelo menos um)</span></h3></legend>
           <!-- Opções geradas a partir de js/dados/projetos.js (mesma fonte dos cards) -->
           <div id="opcoes-projetos" class="grade opcoes"></div>
           <template id="modelo-opcao-projeto">

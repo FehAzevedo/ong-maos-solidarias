@@ -5,8 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Guia de componentes visuais da plataforma da ONG Mãos Solidárias.">
   <title>Guia de Componentes | ONG Mãos Solidárias</title>
+  <link rel="icon" type="image/png" href="../imagens/favicon.png">
+  <!-- Antes do CSS ser desenhado: marca que há JavaScript (o menu já nasce recolhido
+       no celular, sem deslocar a página) e aplica o tema salvo (sem piscar o tema claro) -->
+  <script>document.documentElement.classList.add('js'); try { var tema = JSON.parse(localStorage.getItem('maos-solidarias:tema')); if (tema && tema !== 'automatico') document.documentElement.dataset.tema = tema; } catch (erro) {}</script>
   <link rel="stylesheet" href="../css/estilo.css">
   <script type="module" src="../js/main.js"></script>
+  <!-- Navegadores sem suporte a módulos não rodam o main.js: o menu volta a ficar sempre visível -->
+  <script nomodule>document.documentElement.classList.remove('js');</script>
 </head>
 <body>
   <a class="pular-link" href="#conteudo">Pular para o conteúdo</a>
@@ -34,11 +40,20 @@
           </ul>
         </li>
         <li><a href="cadastro.html">Seja Voluntário</a></li>
+        <li class="menu__tema">
+          <label for="seletor-tema">Tema</label>
+          <select id="seletor-tema">
+            <option value="automatico">Automático</option>
+            <option value="claro">Claro</option>
+            <option value="escuro">Escuro</option>
+            <option value="alto-contraste">Alto contraste</option>
+          </select>
+        </li>
       </ul>
     </nav>
   </header>
 
-  <main id="conteudo">
+  <main id="conteudo" tabindex="-1">
     <h1>Guia de Componentes</h1>
     <p class="introducao">Referência visual dos componentes da plataforma. Para usar um componente, basta copiar a estrutura HTML e trocar a classe de variação.</p>
 

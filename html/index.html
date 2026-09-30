@@ -5,8 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="ONG Mãos Solidárias: segurança alimentar, educação e inclusão social na zona leste de São Paulo.">
   <title>ONG Mãos Solidárias | Início</title>
+  <link rel="icon" type="image/png" href="../imagens/favicon.png">
+  <!-- Antes do CSS ser desenhado: marca que há JavaScript (o menu já nasce recolhido
+       no celular, sem deslocar a página) e aplica o tema salvo (sem piscar o tema claro) -->
+  <script>document.documentElement.classList.add('js'); try { var tema = JSON.parse(localStorage.getItem('maos-solidarias:tema')); if (tema && tema !== 'automatico') document.documentElement.dataset.tema = tema; } catch (erro) {}</script>
   <link rel="stylesheet" href="../css/estilo.css">
   <script type="module" src="../js/main.js"></script>
+  <!-- Navegadores sem suporte a módulos não rodam o main.js: o menu volta a ficar sempre visível -->
+  <script nomodule>document.documentElement.classList.remove('js');</script>
 </head>
 <body>
   <a class="pular-link" href="#conteudo">Pular para o conteúdo</a>
@@ -34,11 +40,20 @@
           </ul>
         </li>
         <li><a href="cadastro.html">Seja Voluntário</a></li>
+        <li class="menu__tema">
+          <label for="seletor-tema">Tema</label>
+          <select id="seletor-tema">
+            <option value="automatico">Automático</option>
+            <option value="claro">Claro</option>
+            <option value="escuro">Escuro</option>
+            <option value="alto-contraste">Alto contraste</option>
+          </select>
+        </li>
       </ul>
     </nav>
   </header>
 
-  <main id="conteudo">
+  <main id="conteudo" tabindex="-1">
     <section class="destaque grade" aria-labelledby="destaque-titulo">
       <h1 id="destaque-titulo">Juntos, transformamos a zona leste de São Paulo</h1>
       <p>Alimentação, educação e inclusão digital para famílias de Itaquera, com a força de quem doa tempo e recursos.</p>
@@ -58,8 +73,13 @@
       <p>Desde 2015, a ONG Mãos Solidárias atua na zona leste de São Paulo promovendo segurança alimentar, educação e inclusão social para famílias em situação de vulnerabilidade.</p>
       <figure>
         <picture>
-          <source srcset="../imagens/voluntarios.webp" type="image/webp">
-          <img src="../imagens/voluntarios.jpg" alt="Mãos de vários voluntários empilhadas umas sobre as outras em sinal de união" width="800" height="533">
+          <source type="image/webp"
+                  srcset="../imagens/voluntarios-400.webp 400w, ../imagens/voluntarios.webp 800w"
+                  sizes="(min-width: 1440px) 520px, (min-width: 1024px) 430px, calc(100vw - 32px)">
+          <img src="../imagens/voluntarios.jpg"
+               srcset="../imagens/voluntarios-400.jpg 400w, ../imagens/voluntarios.jpg 800w"
+               sizes="(min-width: 1440px) 520px, (min-width: 1024px) 430px, calc(100vw - 32px)"
+               alt="Mãos de vários voluntários empilhadas umas sobre as outras em sinal de união" width="800" height="533">
         </picture>
         <figcaption>Voluntários reunidos no início de uma ação comunitária.</figcaption>
       </figure>
@@ -99,7 +119,7 @@
            O link abaixo é a alternativa se o mapa não carregar. -->
       <div id="mapa-sede" class="mapa" role="region" aria-label="Mapa com a localização da sede em Itaquera">
         <p class="mapa__alternativa">
-          <a href="https://www.openstreetmap.org/?mlat=-23.5427&amp;mlon=-46.4718#map=16/-23.5427/-46.4718" target="_blank" rel="noopener">Ver a localização da sede no OpenStreetMap</a>
+          <a href="https://www.openstreetmap.org/?mlat=-23.5427&amp;mlon=-46.4718#map=16/-23.5427/-46.4718" target="_blank" rel="noopener">Ver a localização da sede no OpenStreetMap<span class="visualmente-oculto"> (abre em nova aba)</span></a>
         </p>
       </div>
     </section>

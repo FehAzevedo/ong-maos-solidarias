@@ -1,0 +1,8 @@
+# Arquivos de texto sempre com quebra de linha LF, em qualquer sistema
+# (evita que o Git do Windows converta para CRLF ao trocar de branch)
+* text=auto eol=lf
+
+# Binários: nunca converter
+*.png binary
+*.jpg binary
+*.webp binary
